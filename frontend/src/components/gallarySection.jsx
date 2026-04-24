@@ -1,0 +1,129 @@
+import { useEffect, useState } from "react";
+import api from "../api/axios";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+export default function GallerySection() {
+  const [images, setImages] = useState([]);
+  const [current, setCurrent] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
+  // ===========================
+  // FETCH GALLERY IMAGES
+  // ===========================
+useEffect(() => {
+  api.get("/gallery/published")
+    .then((res) => {
+      const data = res.data || [];
+
+      const formatted = data.map((img) => {
+        const path = img.image.startsWith("/")
+          ? img.image
+          : "/" + img.image;
+
+        return `http://localhost:4000${path}`;
+      });
+
+      console.log("IMAGES:", formatted);
+
+      setImages(formatted);
+    })
+    .catch(console.log)
+    .finally(() => setLoading(false));
+}, []);
+
+  // ===========================
+  // AUTO SLIDE
+  // ===========================
+  useEffect(() => {
+    if (!images.length) return;
+
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images]);
+
+  // NAVIGATION
+  const prevSlide = () => {
+    setCurrent((prev) =>
+      prev === 0 ? images.length - 1 : prev - 1
+    );
+  };
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev + 1) % images.length);
+  };
+
+  // ===========================
+  // UI STATES
+  // ===========================
+  if (loading) {
+    return <p className="text-center py-20">Loading gallery...</p>;
+  }
+
+  if (!images.length) {
+    return <p className="text-center py-20">No images found</p>;
+  }
+
+  return (
+    <section className="w-full py-12 px-6 md:px-16">
+
+      <h2 className="text-3xl font-semibold text-center mb-6">
+        Property Gallery
+      </h2>
+
+      <div className="relative w-full h-[250px] sm:h-[350px] md:h-[500px] overflow-hidden rounded-2xl">
+
+        {/* SLIDES */}
+        <div
+          className="flex h-full transition-transform duration-700 ease-in-out"
+          style={{
+            transform: `translateX(-${current * 100}%)`,
+          }}
+        >
+          {images.map((img, i) => (
+            <img
+              key={i}
+              src={img}
+              alt="gallery"
+              className="w-full flex-shrink-0 object-cover"
+            />
+          ))}
+        </div>
+
+        {/* LEFT */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+        >
+          <ChevronLeft />
+        </button>
+
+        {/* RIGHT */}
+        <button
+          onClick={nextSlide}
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+        >
+          <ChevronRight />
+        </button>
+
+        {/* DOTS */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          {images.map((_, i) => (
+            <div
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`w-2.5 h-2.5 rounded-full cursor-pointer ${
+                current === i ? "bg-white" : "bg-white/50"
+              }`}
+            ></div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
