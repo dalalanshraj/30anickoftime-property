@@ -74,14 +74,12 @@ export default function About() {
 
           {/* CONTENT */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold mb-6">
+            <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
               Luxury Living Experience
-            </h2>
+            </h3>
 
             <p className="text-gray-600 leading-relaxed">
-              Our premium gallery showcases the finest visuals of our
-              property, giving you a glimpse of comfort, design, and
-              lifestyle.
+             Luxury Living Experience offers the perfect blend of elegance, comfort, and modern convenience. Designed for those who appreciate refined living, it features stylish interiors, premium furnishings, and thoughtfully curated amenities. Enjoy spacious layouts, high-end finishes, and a peaceful atmosphere that enhances relaxation. Whether you are unwinding after a long day or entertaining guests, every detail is crafted to elevate your lifestyle. From scenic views to seamless services, this experience ensures a stay that feels both indulgent and effortless. Discover a new standard of living where sophistication meets comfort, creating unforgettable moments in a truly luxurious environment.
             </p>
           </div>
 
@@ -94,13 +92,12 @@ export default function About() {
 
           {/* CONTENT */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold mb-6">
+            <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
               Designed for Comfort & Style
-            </h2>
+            </h3>
 
             <p className="text-gray-600 leading-relaxed">
-              Each image reflects thoughtful design, spacious living,
-              and premium amenities crafted to give you the perfect stay.
+             Designed for Comfort & Style, our space offers a perfect blend of modern elegance and relaxing ambiance. Every detail has been thoughtfully curated to ensure a pleasant and hassle-free stay. From cozy furnishings to spacious interiors, guests can enjoy a warm and inviting atmosphere throughout their visit. High-quality amenities, clean surroundings, and tasteful decor create a sense of luxury and ease. Whether you're unwinding after a long day or enjoying peaceful moments indoors, this space provides everything you need. Ideal for both short and extended stays, it ensures comfort, convenience, and a stylish experience that truly feels like home.
             </p>
           </div>
 

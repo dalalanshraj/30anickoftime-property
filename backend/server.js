@@ -27,6 +27,7 @@ import inquiryRoutes from "./routes/inquiryRoutes.js";
 import calendarRoutes from "./routes/listingCalendarRoutes.js";
 import dealRoutes from    "./routes/dealRoutes.js"
 import galleryRoutes from "./routes/galleryRoutes.js";
+import icalcalendarRoutes from "./routes/icalRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -153,6 +154,7 @@ app.use(
   "/gallery-uploads",
   express.static(path.join(process.cwd(), "gallery-uploads"))
 );
+app.use("/api", icalcalendarRoutes);
 
 
 

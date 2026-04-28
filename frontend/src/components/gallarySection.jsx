@@ -70,8 +70,8 @@ useEffect(() => {
 
   return (
     <section className="w-full py-12 px-6 md:px-16">
-
-      <h2 className="text-3xl font-semibold text-center mb-6">
+<p className="uppercase text-xs text-center tracking-[3px] text-yellow-500 mb-3">Gallery</p>
+     <h2 className="text-3xl text-center md:text-5xl font-semibold text-gray-800 mb-8">
         Property Gallery
       </h2>
 

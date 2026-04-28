@@ -4,6 +4,9 @@ import {
   getAllUsers,
   dashboardStats,
   createAdmin,
+  createUser,
+  updateUser,
+  deleteUser,
 } from "../controllers/adminController.js";
 
 import { isAuth, isAdmin } from "../middleware/authMiddleware.js";
@@ -17,6 +20,9 @@ router.post("/login", adminLogin);
 router.get("/dashboard", isAuth, isAdmin, dashboardStats);
 router.get("/users", isAuth, isAdmin, getAllUsers);
 router.post("/register", createAdmin); // TEMPORARY
+router.post("/users", createUser);
+router.put("/users/:id", updateUser);
+router.delete("/users/:id", isAuth, isAdmin, deleteUser);
 
 
 

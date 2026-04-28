@@ -16,6 +16,8 @@ import { IoHome } from "react-icons/io5";
 import { amenitiesData } from "../amenitiesData.js";
 import { activitiesData } from "../activitiesData.js";
 import InquiryModal from "../components/InquiryModal.jsx";
+import DisplayCalendar from "../components/miniCalendar.jsx";
+import PropertyminiCalendar from "../components/PropertyminiCalendar.jsx";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -32,7 +34,6 @@ const PropertyDetail = () => {
   const [blockedDates, setBlockedDates] = useState([]);
   const [openInquiry, setOpenInquiry] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
-
 
   // ================= FETCH LISTING =================
   useEffect(() => {
@@ -80,8 +81,7 @@ const PropertyDetail = () => {
     if (checkIn && checkOut && listing) {
       const minNights = getMinNightsForDate(checkIn);
 
-      const diff =
-        (checkOut - checkIn) / (1000 * 60 * 60 * 24);
+      const diff = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
 
       if (diff < minNights) {
         const newDate = new Date(checkIn);
@@ -106,8 +106,7 @@ const PropertyDetail = () => {
   const getYoutubeEmbed = (url) => {
     if (!url) return null;
     if (url.includes("embed")) return url;
-    if (url.includes("watch?v="))
-      return url.replace("watch?v=", "embed/");
+    if (url.includes("watch?v=")) return url.replace("watch?v=", "embed/");
     if (url.includes("youtu.be/"))
       return `https://www.youtube.com/embed/${url.split("youtu.be/")[1]}`;
     return null;
@@ -127,8 +126,6 @@ const PropertyDetail = () => {
     return `${year}-${month}-${day}`;
   };
 
-
-
   // ================= MIN NIGHT AUTO FIX =================
   // 🔹 single function
 
@@ -137,18 +134,14 @@ const PropertyDetail = () => {
       {/* GALLERY */}
       <PropertyGallery images={imageUrls} />
 
-      <div className="max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
-
+      <div className="max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 lg:grid-cols-3 gap-10 mb-20">
         {/* LEFT */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow p-6">
-
+        <div className="lg:col-span-2 bg-white rounded-3xl shadow-lg p-6 md:p-10">
           <p className="text-gray-500 text-sm mb-2">
             {listing.location?.address || "Location"}
           </p>
 
-          <h1 className="text-4xl font-bold mb-4">
-            {listing.property?.title}
-          </h1>
+          <h1 className="text-4xl font-bold mb-4">{listing.property?.title}</h1>
 
           {/* ICONS */}
           <div className="flex gap-20 mb-6 flex-wrap">
@@ -184,7 +177,7 @@ const PropertyDetail = () => {
           <h2 className="text-2xl font-semibold mt-8 mb-4">Amenities</h2>
           {amenitiesData.map((section) => {
             const selected = section.options.filter(
-              (item) => listing.amenities?.[item]
+              (item) => listing.amenities?.[item],
             );
             if (selected.length === 0) return null;
 
@@ -206,7 +199,7 @@ const PropertyDetail = () => {
           <h2 className="text-2xl font-semibold mt-8 mb-4">Activities</h2>
           {activitiesData.map((section) => {
             const selected = section.options.filter(
-              (item) => listing.activities?.[item]
+              (item) => listing.activities?.[item],
             );
             if (selected.length === 0) return null;
 
@@ -243,10 +236,7 @@ const PropertyDetail = () => {
             <div className="mt-10">
               <h2 className="text-2xl font-semibold mb-4">Location</h2>
               <iframe
-                src={getMapEmbedUrl(
-                  listing.location.lat,
-                  listing.location.lng
-                )}
+                src={getMapEmbedUrl(listing.location.lat, listing.location.lng)}
                 className="w-full h-96 rounded-xl border"
                 allowFullScreen
                 title="map"
@@ -254,52 +244,42 @@ const PropertyDetail = () => {
             </div>
           )}
 
-        
+          {/* REVIEWS */}
+          {publishedReviews.length > 0 && (
+            <div className="mt-14">
+              <h2 className="text-2xl font-semibold mb-6">
+                Guest Reviews ({publishedReviews.length})
+              </h2>
 
-        {/* REVIEWS */}
-{publishedReviews.length > 0 && (
-  <div className="mt-14">
-    <h2 className="text-2xl font-semibold mb-6">
-      Guest Reviews ({publishedReviews.length})
-    </h2>
+              {publishedReviews.map((review) => (
+                <div key={review._id} className="mb-8">
+                  <div className=" rounded-xl p-6 bg-gray-50">
+                    {/* ⭐ RATING */}
+                    <div className="text-yellow-500 text-lg mb-2">
+                      {"★".repeat(review.rating)}
+                      {"☆".repeat(5 - review.rating)}
+                    </div>
 
-    {publishedReviews.map((review) => (
-      <div key={review._id} className="mb-8">
-        <div className="border rounded-xl p-6 bg-gray-50">
-          
-          {/* ⭐ RATING */}
-          <div className="text-yellow-500 text-lg mb-2">
-            {"★".repeat(review.rating)}
-            {"☆".repeat(5 - review.rating)}
-          </div>
+                    {/* TITLE */}
+                    <h4 className="font-semibold text-lg">{review.title}</h4>
 
-          {/* TITLE */}
-          <h4 className="font-semibold text-lg">
-            {review.title}
-          </h4>
+                    {/* MESSAGE */}
+                    <p className="text-gray-700 mt-2">{review.message}</p>
 
-          {/* MESSAGE */}
-          <p className="text-gray-700 mt-2">
-            {review.message}
-          </p>
-
-          {/* 🔥 ADMIN REPLY (ADD THIS) */}
-          {review.reply && (
-            <div className="mt-4 bg-green-50 border-l-4 border-green-500 p-4 rounded">
-              <p className="text-sm font-semibold text-green-700 mb-1">
-                Owner Reply
-              </p>
-              <p className="text-gray-700 text-sm">
-                {review.reply}
-              </p>
+                    {/* 🔥 ADMIN REPLY (ADD THIS) */}
+                    {review.reply && (
+                      <div className="mt-4 bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                        <p className="text-sm font-semibold text-green-700 mb-1">
+                          Owner Reply
+                        </p>
+                        <p className="text-gray-700 text-sm">{review.reply}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
-
-        </div>
-      </div>
-    ))}
-  </div>
-)}
 
           <button
             onClick={() => setOpenReview(true)}
@@ -309,83 +289,18 @@ const PropertyDetail = () => {
           </button>
 
           {openReview && (
-            <ReviewModal
-              listingId={id}
-              onClose={() => setOpenReview(false)}
-            />
+            <ReviewModal listingId={id} onClose={() => setOpenReview(false)} />
           )}
         </div>
 
         {/* RIGHT BOOKING */}
-          {/* CALENDAR */}
-         
-        <div className="sticky top-[100px] self-start bg-white  p-6 space-y-4">
-          {/* <h3 className="text-xl font-bold">Check Availability</h3> */}
- <ProCalendar listingId={id} />
-          {/* <div className="flex gap-2">
-            <DatePicker
-              selected={checkIn}
-              onChange={(date) => {
-                setCheckIn(date);
-                setCheckOut(null);
-              }}
-              excludeDates={blockedDates}
-              placeholderText="Check-in"
-              minDate={new Date()}
-              className="border p-3 rounded w-full"
-            />
+        {/* CALENDAR */}
 
-            <DatePicker
-              selected={checkOut}
-              onChange={(date) => setCheckOut(date)}
-              excludeDates={blockedDates}
-              placeholderText="Check-out"
-              minDate={
-                checkIn
-                  ? (() => {
-                    const d = new Date(checkIn);
-
-                    // ✅ IMPORTANT FIX
-                    d.setHours(12, 0, 0, 0);
-
-                    d.setDate(
-                      d.getDate() + getMinNightsForDate(checkIn)
-                    );
-
-                    return d;
-                  })()
-                  : new Date()
-              }
-              className="border p-3 rounded w-full"
-            />
-          </div> */}
-
-          {/* <button
-            disabled={!checkIn || !checkOut}
-            onClick={() => setOpenBooking(true)}
-            className={`w-full py-3 rounded-xl font-semibold text-white 
-      ${!checkIn || !checkOut
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-              }`}
-          >
-            Book Now
-          </button> */}
-          {/* <button
-            onClick={() => setOpenInquiry(true)}
-            className="w-full py-3 rounded-xl font-semibold bg-green-600 hover:bg-green-700 text-white cursor-pointer"
-          >
-            Send Inquiry
-          </button>
-          {openInquiry && (
-            <InquiryModal
-              propertyId={id}
-              onClose={() => setOpenInquiry(false)}
-            />
-
-          )} */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-[100px] bg-white rounded-3xl shadow-xl p-6 ">
+            <PropertyminiCalendar />
+          </div>
         </div>
-
       </div>
 
       {/* BOOKING MODAL */}

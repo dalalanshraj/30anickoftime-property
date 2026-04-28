@@ -32,39 +32,56 @@ export default function InfoSection() {
             md:w-[420px]
           ">
 
-            <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.2)] p-6 md:p-8 mt-0 md:mt-70">
+          <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-6 md:p-8 mt-6 md:mt-30 border border-gray-100 transition hover:shadow-[0_25px_80px_rgba(0,0,0,0.25)]">
 
-              <p className="text-xs tracking-widest text-gray-500 uppercase mb-3">
-                Important Information
-              </p>
+  {/* TOP LABEL */}
+  <p className="text-xs tracking-[3px] text-yellow-500 uppercase mb-2 font-medium">
+    INFORMATION
+  </p>
 
-              <h2 className="text-2xl md:text-3xl font-semibold mb-6">
-                What you need to know
-              </h2>
+  {/* HEADING */}
+  <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+    Extra Charges <span className="text-yellow-500">(Mandatory)</span>
+  </h2>
 
-              <ul className="space-y-4 text-gray-700 text-sm md:text-base">
-                <li className="flex gap-3">
-                  <span className="mt-2 w-2 h-2 bg-black rounded-full"></span>
-                  Additional people may incur additional fees depending on policy.
-                </li>
+  {/* LIST */}
+  <ul className="space-y-4">
 
-                <li className="flex gap-3">
-                  <span className="mt-2 w-2 h-2 bg-black rounded-full"></span>
-                  Government-issued ID required at check-in.
-                </li>
+    {/* ITEM */}
+    <li className="flex items-center justify-between bg-gray-50 hover:bg-yellow-50 transition p-4  rounded-xl group">
+      <div className="flex items-center gap-3">
+        <div className="w-3 h-3 bg-yellow-500 rounded-full group-hover:scale-125 transition"></div>
+        <span className="text-gray-800 font-medium">Deposit</span>
+      </div>
+      <span className="text-md font-semibold text-gray-600">$300 Fixed</span>
+    </li>
 
-                <li className="flex gap-3">
-                  <span className="mt-2 w-2 h-2 bg-black rounded-full"></span>
-                  Special requests subject to availability.
-                </li>
+    <li className="flex items-center justify-between bg-gray-50 hover:bg-yellow-50 transition p-4 rounded-xl group">
+      <div className="flex items-center gap-3">
+        <div className="w-3 h-3 bg-yellow-500 rounded-full group-hover:scale-125 transition"></div>
+        <span className="text-gray-800 font-medium">Bed Tax</span>
+      </div>
+      <span className="text-md font-semibold text-gray-600">5%</span>
+    </li>
 
-                <li className="flex gap-3">
-                  <span className="mt-2 w-2 h-2 bg-black rounded-full"></span>
-                  Parties or group events are prohibited.
-                </li>
-              </ul>
+    <li className="flex items-center justify-between bg-gray-50 hover:bg-yellow-100 transition p-4 rounded-xl group">
+      <div className="flex items-center gap-3">
+        <div className="w-3 h-3 bg-yellow-500 rounded-full group-hover:scale-125 transition"></div>
+        <span className="text-gray-800 font-medium">Sales Tax</span>
+      </div>
+      <span className="text-md font-semibold text-gray-600">7%</span>
+    </li>
 
-            </div>
+    <li className="flex items-center justify-between bg-gray-50 hover:bg-yellow-50 transition p-4 rounded-xl group">
+      <div className="flex items-center gap-3">
+        <div className="w-3 h-3 bg-yellow-500 rounded-full group-hover:scale-125 transition"></div>
+        <span className="text-gray-800 font-medium">City Tax</span>
+      </div>
+      <span className="text-md font-semibold text-gray-600">1%</span>
+    </li>
+
+  </ul>
+</div>
           </div>
 
         </div>

@@ -105,3 +105,60 @@ export const createAdmin = async (req, res) => {
   res.json({ message: "Admin created successfully" });
 };
 
+export const createUser = async (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  const exists = await User.findOne({ email });
+  if (exists) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  const hashed = await bcrypt.hash(password, 10);
+
+  const user = new User({
+    name,
+    email,
+    password: hashed,
+    role: role || "user",
+  });
+
+  await user.save();
+
+  res.json({ message: "User created" });
+};
+
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { name, email, role },
+    { new: true }
+  );
+
+  res.json(user);
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userToDelete = await User.findById(id);
+
+    if (!userToDelete) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (req.user.email === userToDelete.email) {
+      return res.status(400).json({ message: "Cannot delete yourself" });
+    }
+
+    await User.findByIdAndDelete(id);
+
+    res.json({ message: "User deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Delete error" });
+  }
+};

@@ -21,8 +21,9 @@ const Properties = () => {
 
       {/* LISTINGS */}
       <div className="p-10 bg-gray-100 ">
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Available Properties
+         <p className="uppercase text-xs text-center tracking-[3px] text-yellow-500 mb-3">Properties</p>
+        <h2 className="text-3xl md:text-5xl text-center font-semibold text-gray-800 mb-8">
+          Our Properties
         </h2>
 
         {loading && (

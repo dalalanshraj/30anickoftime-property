@@ -1,7 +1,8 @@
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { FiMail, FiPhone } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
+import logo from "../assets/logo/LOGO.png"
 
 export default function Footer() {
   return (
@@ -11,8 +12,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
           {/* BRAND */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">Just Beachy</h2>
-            <p className="text-gray-400 text-sm">
+            <div className=" w-30 mb-0">
+              <img src={logo} alt="" srcset=""  />
+            </div>
+            <p className="text-gray-400 text-sm mt-6">
               Luxury vacation rentals designed for comfort and unforgettable
               experiences.
             </p>
@@ -22,10 +25,13 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li className="hover:text-white cursor-pointer">Home</li>
-              <li className="hover:text-white cursor-pointer">Properties</li>
-              <li className="hover:text-white cursor-pointer">Amenities</li>
-              <li className="hover:text-white cursor-pointer">Contact</li>
+             <Link to={"/"}> <li className="hover:text-white cursor-pointer">Home</li></Link>
+              {/* <li className="hover:text-white cursor-pointer">Properties</li> */}
+            <Link to={"/about"} > <li className="hover:text-white cursor-pointer">About-us</li></Link>
+             <Link to={"/contect-us"}> <li className="hover:text-white cursor-pointer">Contact</li></Link>
+              <Link to={"/booking-Policy"}> <span className="hover:text-white cursor-pointer">
+              Booking Policy
+            </span></Link>
             </ul>
           </div>
 
@@ -35,21 +41,26 @@ export default function Footer() {
             <div className="space-y-3 text-gray-400 text-sm">
               <div className="flex items-center gap-2">
                 <FiPhone />
-                <span>+1 (123) 456-7890</span>
+                <span>+1 (850) 653-6900</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <FiMail />
-                <span>info@sawgrass.com</span>
+                <span>annphillipspcb@yahoo.com</span>
               </div>
             </div>
           </div>
 
           {/* SOCIAL */}
           <div>
-            <h3 className="font-semibold mb-4">Follow Us</h3>
+              <Link to="/admin/login">
+              <button className="bg-yellow-400 hover:bg-yellow-500 text-sm font-medium px-4 py-2 rounded shadow flex items-center gap-2 mt-1">
+                <MdEmail />
+                Admin Login
+              </button>
+            </Link>
 
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <a
                 href="#"
                 className="p-2 bg-white/10 rounded-full hover:bg-blue-600 transition"
@@ -70,14 +81,9 @@ export default function Footer() {
               >
                 <FaTwitter />
               </a>
-            </div>
+            </div> */}
 
-            <Link to="/admin/login">
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-sm font-medium px-4 py-2 rounded shadow flex items-center gap-2 mt-10">
-                <MdEmail />
-                Admin Login
-              </button>
-            </Link>
+          
           </div>
         </div>
 
@@ -90,10 +96,8 @@ export default function Footer() {
           </p>
 
           <div className="flex gap-6">
-            <span className="hover:text-white cursor-pointer">
-              Privacy Policy
-            </span>
-            <span className="hover:text-white cursor-pointer">Terms</span>
+          
+            {/* <span className="hover:text-white cursor-pointer">Terms</span> */}
           </div>
         </div>
       </div>

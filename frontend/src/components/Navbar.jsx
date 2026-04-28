@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo/LOGO.png"
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function Navbar() {
     { name: "Home", path: "/" },
     { name: "Photos", path: "/gallery" },
     { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Contact", path: "/contect-us" },
   ];
 
   return (
@@ -42,21 +43,21 @@ export default function Navbar() {
       className={`fixed w-full z-50 transition-all duration-300 ${
         scrolled
           ? "bg-black/70 backdrop-blur-md shadow-lg"
-          : "bg-transparent"
+          : ""
       }`}
     >
       <div className="flex items-center justify-between px-6 md:px-12 py-4 text-white">
         
         {/* Logo */}
-        <div className="text-2xl font-bold">
-          <span className="text-yellow-400">Just </span> Beachy Rental
+        <div className="w-25">
+          <img src={logo} alt="logo" srcset="" />
         </div>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 items-center">
 
           {links.map((link, i) => (
-            <li key={i} className="relative group">
+            <li key={i} className="relative group text-xl">
               <Link to={link.path}>{link.name}</Link>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
             </li>
@@ -109,7 +110,7 @@ export default function Navbar() {
       <div
         className={`md:hidden transition-all duration-300 overflow-hidden ${
           open ? "max-h-96" : "max-h-0"
-        } bg-black/90 backdrop-blur-lg`}
+        } `}
       >
         <div className="px-6 py-4 space-y-4 text-white">
           {links.map((link, i) => (
@@ -119,14 +120,14 @@ export default function Navbar() {
           ))}
 
           {/* Mobile Dropdown (click-based) */}
-          <div>
+          {/* <div>
             <p className="mb-2">Amenities</p>
             <div className="pl-4 space-y-2 text-sm text-gray-300">
               <Link to="/pool">Pool</Link>
               <Link to="/gym">Gym</Link>
               <Link to="/spa">Spa</Link>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </nav>

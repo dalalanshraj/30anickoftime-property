@@ -99,3 +99,6 @@ select::-webkit-scrollbar-thumb:hover {
 .react-datepicker-popper {
   z-index: 99999 !important;
 }
+button{
+  cursor: pointer;
+}

@@ -26,6 +26,9 @@ import Users from "./admin/pages/Users";
 import GalleryAdmin from "./admin/pages/Gallery";
 import Gallery from "./pages/Gallery";
 import About from "./pages/About";
+import ScrollToTop from "./components/ScrollToTop";
+import Contact from "./pages/Contact";
+import BookingPolicy from "./pages/bookingPolicy";
 // import SpecialsDeals from "./pages/Specials";
 // import Reviews from "./pages/Reviews";
 // import AboutUs from "./pages/About";
@@ -39,6 +42,7 @@ function App() {
 
   return (
     <>
+    <ScrollToTop />
       {/* FRONTEND ONLY */}
       {!isAdminRoute && <Navbar />}
 
@@ -48,6 +52,8 @@ function App() {
           <Route path="/:id" element={<PropertyDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contect-us" element={<Contact />} />  
+          <Route path="/booking-policy" element={<BookingPolicy />}/>  
         {/* <Route path="/properties" element={<Properties />} />
         <Route path="/results" element={<Results />} />
         <Route path="/BookingPage" element={<BookingPage />} />

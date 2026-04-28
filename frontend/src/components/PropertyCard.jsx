@@ -49,7 +49,7 @@ const PropertyCard = ({ listing }) => {
               </div>
             ) : (
               <span className="text-xl font-semibold">
-                ${originalPrice || "Call"}
+                {/* ${originalPrice || "Call"} */}
               </span>
             )}
           </div>

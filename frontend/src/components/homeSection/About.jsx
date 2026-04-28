@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
+import DisplayCalendar from "../miniCalendar";
+import { Link } from "react-router-dom";
 
-export default function AboutSection({ listingId }) {
+export default function  AboutSection({ listingId }) {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -64,26 +66,35 @@ export default function AboutSection({ listingId }) {
   return (
     <section className="w-full bg-[#f8f8f8] py-20 px-6 md:px-16">
       {/* ================= TOP ================= */}
-      <div className="max-w-7xl mx-auto grid md:grid-cols-1  gap-12 items-start text-center">
-        {/* LEFT */}
-        <div>
-          <p className="uppercase tracking-widest text-yellow-500 text-xs mb-4">
-            {listing?.property?.title || "Welcome"}
-          </p>
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight mb-6">
-            {listing?.property?.tagline ||
-              "An incredible vacation spot with something for everyone"}
-          </h2>
+  {/* LEFT CONTENT */}
+  <div>
+    <p className="uppercase text-xs tracking-[3px] text-yellow-500 mb-3">
+      {listing?.property?.title || "Welcome"}
+    </p>
 
-          <p className="text-gray-600 text-base">
-            {listing?.property?.summary ||
-              "3BR/3BA • Beach • Pool • Lagoon Front • And More"}
-          </p>
-        </div>
+    <h2 className="text-3xl md:text-5xl font-semibold text-gray-800">
+      {listing?.property?.tagline ||
+        "An incredible vacation spot with something for everyone"}
+    </h2>
 
-       
-      </div>
+    <p className="text-gray-600 text-base mt-2">
+      {listing?.property?.summary ||
+        "3BR/3BA • Beach • Pool • Lagoon Front • And More"}
+    </p>
+    <Link to={"/booking-policy"}>
+      <button className="px-6 py-3 mt-3 bg-yellow-400 text-black rounded-full font-semibold hover:scale-105 transition">Booking Policy</button>
+      </Link>
+  </div>
+
+
+  {/* RIGHT CALENDAR */}
+  
+    <DisplayCalendar />
+
+
+</div>
 
       {/* ================= BOTTOM ================= */}
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 mt-20 items-center">
@@ -97,14 +108,15 @@ export default function AboutSection({ listingId }) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
 
-          <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium shadow">
+          {/* <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium shadow">
             {listing?.property?.tag || "Premium Property"}
-          </div>
+          </div> */}
         </div>
 
         {/* TEXT */}
         <div>
-          <h3 className="text-3xl md:text-4xl font-semibold mb-6">
+           <p className="uppercase text-xs tracking-[3px] text-yellow-500 mb-3">About us</p>
+          <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
             About this Property
           </h3>
           <p className="text-gray-600 leading-relaxed ">
@@ -127,14 +139,14 @@ export default function AboutSection({ listingId }) {
             // }}
            
           /> */}
-          <div className="p-3 flex">
-            <p className="text-green-500">Ann McDaniel Phillips</p> -{" "}
+          <div className="p-3 flex mx-[-12px]">
+            <p className="text-green-500 ">Ann McDaniel Phillips</p> &nbsp; - &nbsp;{" "}
             <span className="font-bold  uppercase">owner</span>
           </div>
 
-          <button className="px-6 py-3 rounded-full bg-black text-white hover:bg-gray-800 transition">
+        <Link to={"/about"}>  <button className="px-6 py-3 bg-yellow-400 text-black rounded-full font-semibold hover:scale-105 transition">
             Know More →
-          </button>
+          </button></Link>
         </div>
       </div>
     </section>
