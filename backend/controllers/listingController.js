@@ -272,7 +272,7 @@ export const updatePhotos = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const newPhotos = req.files?.map(file => `/uploads/${file.filename}`) || [];
+    const newPhotos = req.files?.map(file => `/gallery-uploads/${file.filename}`) || [];
 
     if (!newPhotos.length) {
       return res.status(400).json({ error: "No photos uploaded" });
@@ -324,7 +324,7 @@ export const deletePhoto = async (req, res) => {
     await listing.save();
 
     // remove file from server
-    const filePath = path.join("uploads", filename);
+    const filePath = path.join("gallery-uploads", filename);
 
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
