@@ -7,7 +7,7 @@ export default function GallerySection() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  const BASE_URL = import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
 
   // ===========================
   // FETCH GALLERY IMAGES
@@ -22,7 +22,7 @@ useEffect(() => {
           ? img.image
           : "/" + img.image;
 
-        return `http://localhost:4000${path}`;
+        return `https://annmcdaniel.mysawgrasspointe.com${path}`;
       });
 
       console.log("IMAGES:", formatted);

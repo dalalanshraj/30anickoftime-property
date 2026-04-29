@@ -51,7 +51,7 @@ export default function Gallery() {
               onClick={() => setActive(img)}
             >
               <img
-                src={`http://localhost:4000${img.image}`}
+                src={`https://annmcdaniel.mysawgrasspointe.com${img.image}`}
                 className="w-full rounded-2xl transition duration-700 group-hover:scale-110"
               />
 
@@ -77,7 +77,7 @@ export default function Gallery() {
 
           {/* IMAGE */}
           <img
-            src={`http://localhost:4000${active.image}`}
+            src={`https://annmcdaniel.mysawgrasspointe.com${active.image}`}
             className="max-h-[90vh] max-w-[90vw] rounded-xl"
           />
         </div>

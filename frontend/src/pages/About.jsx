@@ -5,7 +5,7 @@ export default function About() {
   const [images, setImages] = useState([]);
 
   const BASE_URL =
-    import.meta.env.VITE_API_URL || "http://localhost:4000";
+    import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
 
   useEffect(() => {
     api.get("/gallery/published")
@@ -17,7 +17,7 @@ export default function About() {
             ? img.image
             : "/" + img.image;
 
-          return `http://localhost:4000${path}`;
+          return `https://annmcdaniel.mysawgrasspointe.com${path}`;
         });
 
         setImages(formatted);
