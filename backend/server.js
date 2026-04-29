@@ -149,7 +149,6 @@ app.use("/api/listings", listingRoutes);
 app.use("/api/listings", calendarRoutes);
 app.use("/api/deals" , dealRoutes);
 app.use("/api/inquiries" , inquiryRoutes);
-app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/gallery", galleryRoutes);
 app.use(
   "/gallery-uploads",

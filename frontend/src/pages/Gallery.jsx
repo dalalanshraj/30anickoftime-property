@@ -5,11 +5,14 @@ export default function Gallery() {
   const [images, setImages] = useState([]);
   const [active, setActive] = useState(null);
 
-  useEffect(() => {
-    api.get("/gallery/published")
-      .then((res) => setImages(res.data))
-      .catch(console.log);
-  }, []);
+ useEffect(() => {
+  api.get("/gallery/published")
+    .then((res) => {
+      console.log("API RESPONSE:", res.data);
+      setImages(res.data);
+    })
+    .catch(console.log);
+}, []);
 
   return (
     <>
