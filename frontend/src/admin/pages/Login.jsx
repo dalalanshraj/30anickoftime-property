@@ -91,7 +91,7 @@ const Login = () => {
         </button>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          Coastal Dream Rentals Admin Panel
+          Just Beachy Rentals Admin Panel
         </p>
       </form>
     </div>

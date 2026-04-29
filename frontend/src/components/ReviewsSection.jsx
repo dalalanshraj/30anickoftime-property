@@ -8,32 +8,30 @@ export default function ReviewsSection() {
   {
     id: 1,
     title: "Excellent Experience!",
-    message:
-      "I just spent a month at this condo and it was great. Location was perfect...it was clean and very well appointed. I can't wait until next year!!!! Thanks Ann.",
+    message: "I just spent a month at this condo...",
     date: "Jan 7, 2017",
-    
+    name: "John Smith",
   },
   {
     id: 2,
     title: "Great Vacation",
-    message:
-      "We have used Ann for three years now!!! We love her and her condo! close to everything and on second floor so no elevator!!!",
+    message: "We have used Ann for three years now!!!",
     date: "Jun 24, 2017",
+    name: "Emily Davis",
   },
   {
     id: 3,
     title: "GREAT STAY!",
-    message:
-      "My family had a great time. Loved being on second floor, easy access to the beach and pool area. Great location, walking distance to lots of restaurants. Most importantly Ann was just a phone call away. Thank you Ann!",
+    message: "My family had a great time...",
     date: "Jul 15, 2017",
+    name: "Michael Brown",
   },
-   {
+  {
     id: 4,
     title: "Just Peachy",
-    message:
-      "We thoroughly enjoyed our time in Just Peachy - #2372. It was lovely, comfortable and clean. The kitchen was well stocked with everything we needed. It was conveniently located close to the steps and the elevator. Ann was great to work with. We will stay there again!!!",
+    message: "We thoroughly enjoyed our time...",
     date: "May 28, 2018",
-    name
+    name: "Sarah Wilson", // 
   },
 ];
 
@@ -78,9 +76,9 @@ export default function ReviewsSection() {
 
         {/* USER */}
         <div className="mt-6 flex items-center gap-3">
-          {/* <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
             {preview[0].name?.charAt(0)}
-          </div> */}
+          </div>
           <p className="font-semibold text-gray-800">
             {preview[0].name}
           </p>
@@ -108,9 +106,9 @@ export default function ReviewsSection() {
 
           {/* USER */}
           <div className="mt-4 flex items-center gap-2">
-            {/* <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-bold">
+            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-bold">
               {r.name?.charAt(0)}
-            </div> */}
+            </div>
             <p className="font-semibold text-gray-800 text-sm">
               {r.name}
             </p>
@@ -183,7 +181,15 @@ export default function ReviewsSection() {
             <p className="text-sm text-gray-400 mt-3">
               {r.date || "Jan 7, 2017"}
             </p>
+            <div className="mt-4 flex items-center gap-2">
+            <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+  {r.name?.charAt(0)}
+</div>
+ <p className="font-semibold text-gray-800 text-sm">
+              {r.name}
+            </p>
 
+          </div>
           </div>
         ))}
 
