@@ -5,14 +5,11 @@ export default function Gallery() {
   const [images, setImages] = useState([]);
   const [active, setActive] = useState(null);
 
- useEffect(() => {
-  api.get("/gallery/published")
-    .then((res) => {
-      console.log("API RESPONSE:", res.data);
-      setImages(res.data);
-    })
-    .catch(console.log);
-}, []);
+  useEffect(() => {
+    api.get("/gallery/published")
+      .then((res) => setImages(res.data))
+      .catch(console.log);
+  }, []);
 
   return (
     <>
@@ -54,7 +51,7 @@ export default function Gallery() {
               onClick={() => setActive(img)}
             >
               <img
-                src={`https://annmcdaniel.mysawgrasspointe.com${img.image}`}
+                src={`http://localhost:4000${img.image}`}
                 className="w-full rounded-2xl transition duration-700 group-hover:scale-110"
               />
 
@@ -80,7 +77,7 @@ export default function Gallery() {
 
           {/* IMAGE */}
           <img
-            src={`https://annmcdaniel.mysawgrasspointe.com${active.image}`}
+            src={`http://localhost:4000${active.image}`}
             className="max-h-[90vh] max-w-[90vw] rounded-xl"
           />
         </div>

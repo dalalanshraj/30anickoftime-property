@@ -7,7 +7,7 @@ export default function GallerySection() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
+  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   // ===========================
   // FETCH GALLERY IMAGES
@@ -22,7 +22,7 @@ useEffect(() => {
           ? img.image
           : "/" + img.image;
 
-        return `https://annmcdaniel.mysawgrasspointe.com${path}`;
+        return `http://localhost:4000${path}`;
       });
 
       console.log("IMAGES:", formatted);
@@ -71,7 +71,7 @@ useEffect(() => {
   return (
     <section className="w-full py-12 px-6 md:px-16">
 <p className="uppercase text-xs text-center tracking-[3px] text-yellow-500 mb-3">Gallery</p>
-     <h2 className="text-3xl text-center md:text-5xl font-semibold text-gray-800 mb-8">
+      <h2 className="text-3xl text-center font-semibold text-center mb-6">
         Property Gallery
       </h2>
 

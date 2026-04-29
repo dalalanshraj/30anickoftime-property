@@ -4,7 +4,7 @@ export default function BookingPolicy() {
     const [images, setImages] = useState([]);
 
   const BASE_URL =
-    import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
+    import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   useEffect(() => {
     api.get("/gallery/published")
@@ -16,7 +16,7 @@ export default function BookingPolicy() {
             ? img.image
             : "/" + img.image;
 
-          return `https://annmcdaniel.mysawgrasspointe.com${path}`;
+          return `http://localhost:4000${path}`;
         });
 
         setImages(formatted);
@@ -37,7 +37,7 @@ export default function BookingPolicy() {
   return (
     <>
     {/* 🔥 HERO */}
-      <section className="relative h-[30vh] flex items-center justify-center text-white">
+      <section className="relative h-[20vh] flex items-center justify-center text-white">
 
         <div
           className="absolute inset-0 bg-fixed bg-cover bg-center"
