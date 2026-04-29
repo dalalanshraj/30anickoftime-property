@@ -62,7 +62,7 @@ export default function GalleryAdmin() {
             {/* IMAGE */}
             <div className="relative group">
               <img
-                src={`http://localhost:4000${img.image}`}
+                src={`https://annmcdaniel.mysawgrasspointe.com${img.image}`}
                 className="w-full h-40 object-cover"
               />
 
