@@ -1,29 +1,33 @@
 import Inquiry from "../models/Inquiry.js";
 
 // USER → CREATE INQUIRY
+
+import mongoose from "mongoose";
+
 export const createInquiry = async (req, res) => {
   try {
-    const { propertyId, name, email, phone, message, Arrival , Departure , Adults , Kids } = req.body;
+    const { property, name, email, phone, message, Arrival , Departure , Adults , Kids } = req.body;
 
-    if (!propertyId) {
+    if (!property) {
       return res.status(400).json({ error: "Property is required" });
     }
 
+    if (!mongoose.Types.ObjectId.isValid(property)) {
+      return res.status(400).json({ error: "Invalid property ID" });
+    }
+
     const inquiry = await Inquiry.create({
-      property: propertyId,
+      property,
       name,
       email,
       phone,
       message,
       Arrival,
-      Departure, 
-      Adults, 
+      Departure,
+      Adults,
       Kids,
-
-
     });
 
-    //  populate property title
     const populatedInquiry = await Inquiry.findById(inquiry._id)
       .populate("property", "title");
 
@@ -33,7 +37,7 @@ export const createInquiry = async (req, res) => {
     });
 
   } catch (err) {
-    // console.error("Inquiry Error:", err);
+    console.log("ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };

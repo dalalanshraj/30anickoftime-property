@@ -186,7 +186,7 @@ if (startDate && endDate && d >= startDate && d <= endDate) {
     if (!found) return "";
 
     if (found.status === "R") return "bg-red-500 text-white rounded-lg";
-    if (found.status === "H") return "bg-yellow-400 text-black rounded-lg";
+    if (found.status === "H") return "bg-[#FFE8BE] text-black rounded-lg";
 
     return "";
   };
@@ -211,7 +211,7 @@ if (startDate && endDate && d >= startDate && d <= endDate) {
             <div className="w-3 h-3 bg-red-500 rounded"></div> Reserved
           </span>
           <span className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-yellow-400 rounded"></div> Hold
+            <div className="w-3 h-3 bg-[#FFE8BE] rounded"></div> Hold
           </span>
         </div>
       </div>

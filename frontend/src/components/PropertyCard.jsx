@@ -5,10 +5,20 @@ import { BedDouble, Bath, MapPin } from "lucide-react";
 const PropertyCard = ({ listing }) => {
   if (!listing) return null;
 
+  const getImageUrl = (path) => {
+  if (!path || typeof path !== "string") return "";
+
+  const base = import.meta.env.VITE_API_URL || "";
+
+  if (path.startsWith("http")) return path;
+
+  return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+};
+
   const image =
-    listing?.photos?.length > 0
-      ? `${import.meta.env.VITE_API_URL}${listing.photos[1]}`
-      : "https://via.placeholder.com/400x300?text=No+Image";
+  listing?.photos?.length > 0
+    ? getImageUrl(listing.photos[0]) // ✅ index 0 use karo
+    : "https://via.placeholder.com/400x300?text=No+Image";
 
   const originalPrice = listing?.rates?.[0]?.nightly || null;
   const dealPrice = listing?.deal?.discountedRate;
@@ -21,10 +31,13 @@ const PropertyCard = ({ listing }) => {
         <div className="relative overflow-hidden">
 
           <img
-            src={image}
-            alt="property"
-            className="w-full h-[240px] object-cover transition duration-700 group-hover:scale-110"
-          />
+  src={image}
+  alt="property"
+  className="w-full h-[240px] object-cover transition duration-700 group-hover:scale-110"
+  onError={(e) => {
+    e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+  }}
+/>
 
           {/* Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>

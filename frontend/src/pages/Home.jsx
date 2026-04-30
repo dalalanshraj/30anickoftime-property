@@ -6,9 +6,9 @@ import GallerySection from "../components/gallarySection";
 import AmenitiesSection from "../components/homeSection/amenitiesSection";
 import api from "../api/axios.js";
 
-import bgImage from "../assets/img4.png";
-import bgImagetwo from "../assets/img2.png";
-import imgthree from "../assets/img4.png";
+import bgImage from "../assets/img.jpg";
+import bgImagetwo from "../assets/img3.jpg";
+import imgthree from "../assets/4-2.jpg";
 
 import BookingModalContact from "../components/bookingModel.jsx";
 import FeesTable from "../components/FeesTable.jsx";
@@ -47,8 +47,8 @@ export default function Hero() {
     : bgImagetwo;
 
   const title = featured?.property?.title || "Luxury Villa";
-  const beds = featured?.property?.beds || 4;
-  const baths = featured?.property?.baths || 3;
+  const beds = featured?.property?.bedrooms || 4;
+  const baths = featured?.property?.bathrooms || 3;
 
   const price =
     featured?.deal?.discountedRate || featured?.rates?.[0]?.nightly || 320;
@@ -85,9 +85,9 @@ export default function Hero() {
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between h-full px-6 md:px-16">
           {/* LEFT */}
           <div className="max-w-xl text-white mt-34 md:mt-24">
-            <p className="uppercase tracking-widest text-yellow-400 text-xs mb-4">
+            {/* <p className="uppercase tracking-widest font-bold text-[#2f9bad] text-xs mb-4">
               Luxury Vacation Homes
-            </p>
+            </p> */}
 
             <h1 className="text-4xl md:text-7xl font-bold mb-6">
               Experience Coastal Living Like Never Before
@@ -103,7 +103,7 @@ export default function Hero() {
                 console.log("CLICKED");
                 setOpen(true);
               }}
-              className="px-6 py-3 bg-yellow-400 text-black rounded-full font-semibold hover:scale-105 transition"
+              className="px-6 py-3 bg-[#FFE8BE] text-black rounded-full font-semibold hover:scale-105 transition"
             >
               Book Now
             </button>
@@ -111,9 +111,9 @@ export default function Hero() {
 
           {/* FLOATING CARD */}
           <div className="hidden md:flex relative">
-            <div className="absolute -inset-4 bg-yellow-400/20 blur-2xl rounded-3xl"></div>
+            <div className="absolute -inset-4 bg-[#FFE8BE]/20 blur-2xl rounded-3xl"></div>
 
-           <div className="relative bg-white/10 backdrop-blur-2xl rounded-3xl p-4 shadow-2xl animate-float">
+            <div className="relative bg-white/10 backdrop-blur-2xl rounded-3xl p-4 shadow-2xl animate-float">
               <img
                 src={image}
                 alt="villa"
@@ -131,7 +131,6 @@ export default function Hero() {
                 {/* <span className="text-sm font-bold">${price}/night</span> */}
               </div>
             </div>
-          
           </div>
         </div>
 
@@ -150,14 +149,14 @@ export default function Hero() {
       </section>
 
       {/* MODAL */}
-   {open && featured && (
-  <BookingModalContact
-    onClose={() => setOpen(false)}
-    listingId={featured._id} // ✅ सही
-  />
-)}
+      {open && featured && (
+        <BookingModalContact
+          onClose={() => setOpen(false)}
+          listingId={featured._id}
+        />
+      )}
       {/* OTHER SECTIONS */}
-      <AboutSection listingId="69e92090f574cf8f9e1a555d" />
+      <AboutSection listingId="69f0c3cd2203c21d5f9f323f" />
       {/* <FeesTable /> */}
       <InfoSection />
       <Properties />
@@ -170,13 +169,24 @@ export default function Hero() {
           />
 
           <div>
-             <p className="uppercase text-xs tracking-[3px] text-yellow-500 mb-3">Beachfront</p>
-          <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
-              Beachfront Rental Properties
+            <p className="uppercase text-xs tracking-[3px] text-[#2f9bad] mb-3">
+              Premium Vacation
+            </p>
+            <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
+              Premium Vacation Rental Homes
             </h3>
             <p className="text-gray-600">
-              Just Beachy Rental Properties provide the perfect getaway for those seeking relaxation and scenic beauty by the ocean. Wake up to stunning sunrise views, enjoy the calming sound of waves, and unwind in a peaceful coastal atmosphere. These properties are designed with comfort in mind, offering modern amenities, stylish interiors, and spacious living areas. Guests can take advantage of direct beach access, making it easy to enjoy morning walks, water activities, or simply relax by the shore. Ideal for families, couples, or solo travelers, beachfront rentals create a memorable experience filled with comfort, privacy, and the natural charm of seaside living.
-
+              Experience a comfortable and thoughtfully designed stay in our
+              premium vacation rental homes, perfect for families and groups.
+              Each property offers spacious interiors, modern amenities, and a
+              welcoming atmosphere to help you relax and unwind. From fully
+              equipped kitchens to cozy living areas and private outdoor spaces,
+              everything is designed to make your stay effortless and enjoyable.
+              Conveniently located near popular dining, shopping, and
+              entertainment spots, these homes provide the perfect balance of
+              privacy and accessibility. Whether you’re planning a short getaway
+              or an extended stay, you’ll find everything you need for a
+              memorable and stress-free experience.
             </p>
           </div>
         </div>
@@ -184,7 +194,7 @@ export default function Hero() {
 
       <AmenitiesSection />
       <GallerySection />
-      <ReviewsSection  />
+      <ReviewsSection />
     </>
   );
 }

@@ -4,6 +4,16 @@ import api from "../../api/axios";
 export default function GalleryAdmin() {
   const [images, setImages] = useState([]);
 
+  const getImageUrl = (path) => {
+    if (!path || typeof path !== "string") return "";
+
+    const base = import.meta.env.VITE_API_URL || "";
+
+    if (path.startsWith("http")) return path;
+
+    return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+  };
+
   const fetchData = async () => {
     const res = await api.get("/gallery");
     setImages(res.data);
@@ -34,7 +44,6 @@ export default function GalleryAdmin() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gallery Manager</h1>
@@ -52,18 +61,20 @@ export default function GalleryAdmin() {
 
       {/* GRID */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-
         {images.map((img) => (
           <div
             key={img._id}
             className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
           >
-
             {/* IMAGE */}
             <div className="relative group">
               <img
-                src={`https://annmcdaniel.mysawgrasspointe.com${img.image}`}
+                src={getImageUrl(img.image)}
                 className="w-full h-40 object-cover"
+                onError={(e) => {
+                  console.log("Gallery IMG ERROR:", e.currentTarget.src);
+                  e.target.src = "/placeholder.png";
+                }}
               />
 
               {/* overlay */}
@@ -72,21 +83,16 @@ export default function GalleryAdmin() {
 
             {/* ACTIONS */}
             <div className="p-3 flex items-center justify-between">
-
               {/* 🔥 TOGGLE SWITCH */}
               <div
                 onClick={() => toggle(img._id)}
                 className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition ${
-                  img.status === "published"
-                    ? "bg-green-500"
-                    : "bg-gray-400"
+                  img.status === "published" ? "bg-green-500" : "bg-gray-400"
                 }`}
               >
                 <div
                   className={`bg-white w-4 h-4 rounded-full shadow-md transform transition ${
-                    img.status === "published"
-                      ? "translate-x-6"
-                      : ""
+                    img.status === "published" ? "translate-x-6" : ""
                   }`}
                 />
               </div>
@@ -103,14 +109,10 @@ export default function GalleryAdmin() {
               >
                 Delete
               </button>
-
             </div>
-
           </div>
         ))}
-
       </div>
-
     </div>
   );
 }

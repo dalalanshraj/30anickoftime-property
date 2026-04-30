@@ -1,30 +1,31 @@
 export const amenities = [
   // Bedroom
-  "1 Sofa Bed",
-  "1 King Bed",
+  "8 Queen Beds",
+  "3 King Beds",
 
   // Dining
   "Eat in Counter",
 
   // Bathroom
-  "Shower/Tub Combo",
-  "Private Bathroom",
-  "Linens & Towels",
+  "Dining Table",
+  "Private BBQ",
+  "Hairdryer",
 
   // Cooling
+  "Walk in Shower",
+  "Private Bathroom",
+
+  // Accessibility
+  "Private Bathroom",
   "Central Air Conditioning",
   "Ceiling Fans",
 
-  // Accessibility
-  "Walk-in Shower",
-  "Single Level - No Stairs",
-  "Safety Bars in Shower",
-
   // Entertainment
-  "TV/DVD",
+  "Handicap Accessible",
+  "Smart T.V.",
   "Television",
   "Swimming",
-  "Fishing",
+  "Stereo",
   "Cable TV",
   "Big Screen TV",
 
@@ -32,16 +33,23 @@ export const amenities = [
   "Board Games",
 
   // General
-  "Elevator/Lift",
-  "Condo",
-  "Fitness Center",
+  "Vacuum",
+  "Telephone",
+  "Smoking outside only",
   "No Smoking",
   "No Pets",
+  "Linens Included",
+  "Elevator/Lift",
+  "High Chairs",
   "Managed By Owner",
 
   // Office
   "Wireless Internet Access",
+  "Pack and Play",
   "Meeting Room",
+  "Home",
+  "Wireless Internet Access",
+  "High Speed Internet Access",
 
   // Kitchen
   "Dishes",
@@ -75,8 +83,14 @@ export const amenities = [
   "Hot Tub/Heated Spa",
   "Beachfront",
   "Balcony",
+  "Private Parking",
+  "Porch Furniture",
+  "Porch",
+  "Beach Chairs Provided",
+  "",
 
   // Parking
   "Parking for 2 cars",
   "Parking Available",
+  "Driveway",
 ];

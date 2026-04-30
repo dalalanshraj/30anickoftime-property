@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../api/axios";
 import emailjs from "@emailjs/browser";
-import modelImg from "../assets/img3.png";
+import modelImg from "../assets/img3.jpg";
 
 export default function BookingModalContact({ listingId, onClose }) {
   const [blockedDates, setBlockedDates] = useState([]);
@@ -16,6 +16,8 @@ export default function BookingModalContact({ listingId, onClose }) {
     name: "",
     email: "",
     phone: "",
+    adults: "1",
+    kids: "0",
     checkIn: null,
     checkOut: null,
     message: "",
@@ -68,69 +70,72 @@ export default function BookingModalContact({ listingId, onClose }) {
     return "available-day";
   };
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
-  setError("");
-  setMessage("");
+  const propertyId = listingId || id;
+
+  if (!propertyId) {aa
+    alert("Property not found ❌");
+    return;
+  }
 
   if (!form.name || !form.email || !form.phone) {
-    setError("Please fill all details ⚠️");
+    alert("Please fill all details ⚠️");
     return;
   }
 
   if (!form.checkIn || !form.checkOut) {
-    setError("Please select dates 📅");
-    return;
-  }
-
-  if (!isRangeValid(form.checkIn, form.checkOut)) {
-    setError("Selected dates already booked ❌");
+    alert("Please select dates 📅");
     return;
   }
 
   try {
-    // ✅ 1. SAVE TO DB
-   await api.post("/inquiries", {
-  propertyId: listingId, // ✅ FIX
+    setLoading(true);
 
-  name: form.name,
-  email: form.email,
-  phone: form.phone,
+    const dbPayload = {
+      property: propertyId, // ✅ FIXED
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      message: form.message || "",
 
-  Arrival: form.checkIn?.toISOString(),
-  Departure: form.checkOut?.toISOString(),
+      Arrival: form.checkIn,
+      Departure: form.checkOut,
 
-  message: form.message || "",
+      Adults: form.adults,
+      Kids: form.kids,
+    };
 
-  Adults: "",
-  Kids: "",
-});
+    console.log("SENDING:", dbPayload);
 
-    // ✅ 2. SEND EMAIL
+    await api.post("/inquiries", dbPayload);
+
+    const emailPayload = {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      checkIn: form.checkIn.toDateString(),
+      checkOut: form.checkOut.toDateString(),
+      adults: form.adults,
+      kids: form.kids,
+      message: form.message,
+    };
+
     await emailjs.send(
-      "service_abc123",
-      "template_xyz456",
-      {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        checkIn: form.checkIn.toDateString(),
-        checkOut: form.checkOut.toDateString(),
-        message: form.message, // ✅ ADD
-      },
-      "public_ABCDEF"
+      "service_x4xnlqz",
+      "template_oeep0hc",
+      emailPayload,
+      "CRTc5BG_9M1t3EjYj"
     );
 
-    setMessage("Booking request sent 🚀");
-
-    setTimeout(() => {
-      onClose();
-    }, 1500);
+    alert("Booking request sent ✅");
 
   } catch (err) {
-    setError("Something went wrong ❌");
-    console.log(listingId)
+    console.log("ERROR:", err.response?.data || err);
+    alert(err.response?.data?.error || "Something went wrong ❌");
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -198,7 +203,28 @@ export default function BookingModalContact({ listingId, onClose }) {
                   className="w-full border p-3 rounded-lg"
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
+                {/* Guests */}
+                <div className="flex gap-3">
+                <input
+                  type="number"
+                  min="1"
+                  value={form.adults}
+                  className="w-full border p-3 rounded-lg"
+                  onChange={(e) =>
+                    setForm({ ...form, adults: e.target.value })
+                  }
+                />
 
+                <input
+                  type="number"
+                  min="0"
+                  value={form.kids}
+                  className="w-full border p-3 rounded-lg"
+                  onChange={(e) =>
+                    setForm({ ...form, kids: e.target.value })
+                  }
+                />
+              </div>
                 {/* DATE */}
                 <div className="flex gap-3">
                   <div
@@ -259,7 +285,7 @@ export default function BookingModalContact({ listingId, onClose }) {
                   </p>
                 )}
 
-                <button className="w-full bg-yellow-400 py-3 rounded-lg">
+                <button className="w-full bg-[#FFE8BE] py-3 rounded-lg">
                   Send Booking
                 </button>
               </form>
@@ -277,7 +303,7 @@ export default function BookingModalContact({ listingId, onClose }) {
       }
 
       .react-datepicker__day.blocked-day {
-        background: #ff4d4f !important;
+        background: #5C5CFF !important;
         color: white !important;
         text-decoration: line-through;
         border-radius: 6px;

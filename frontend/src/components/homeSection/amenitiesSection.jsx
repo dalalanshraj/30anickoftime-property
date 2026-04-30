@@ -10,7 +10,8 @@ export default function AmenitiesSection() {
 
   return (
     <section className="py-16 px-6 md:px-16">
-<p className="uppercase text-center text-xs tracking-[3px] text-yellow-500 mb-3">Amenities</p>
+<p className="uppercase text-center text-xs tracking-[3px] text-[#2f9bad]
+  mb-3">Amenities</p>
       <h2 className="text-3xl text-center md:text-5xl font-semibold text-gray-800 mb-8">
         Our Amenities
       </h2>

@@ -36,7 +36,7 @@ const FeesTable = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-200 rounded-xl overflow-hidden">
-          <thead className="bg-yellow-500 text-white">
+          <thead className="bg-[#2f9bad] text-white">
             <tr>
               <th className="py-3 px-4 text-left">Fee Name</th>
               <th className="py-3 px-4 text-left">Fee Value</th>

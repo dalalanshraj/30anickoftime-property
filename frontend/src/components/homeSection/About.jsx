@@ -3,9 +3,20 @@ import api from "../../api/axios";
 import DisplayCalendar from "../miniCalendar";
 import { Link } from "react-router-dom";
 
-export default function  AboutSection({ listingId }) {
+export default function AboutSection({ listingId }) {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const getImageUrl = (path) => {
+    if (!path || typeof path !== "string") return "";
+
+    const base = import.meta.env.VITE_API_URL || "";
+
+    // already full URL
+    if (path.startsWith("http")) return path;
+
+    return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+  };
 
   // ===========================
   // FETCH LISTING
@@ -60,75 +71,55 @@ export default function  AboutSection({ listingId }) {
   // ===========================
   const image =
     listing?.photos?.length > 0
-      ? `${import.meta.env.VITE_API_URL}${listing.photos[0]}`
+      ? getImageUrl(listing.photos[0])
       : "https://via.placeholder.com/600x400";
 
   return (
     <section className="w-full bg-[#f8f8f8] py-20 px-6 md:px-16">
       {/* ================= TOP ================= */}
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          {/* RIGHT CALENDAR */}
 
-  {/* LEFT CONTENT */}
-  <div>
-    <p className="uppercase text-xs tracking-[3px] text-yellow-500 mb-3">
-      {listing?.property?.title || "Welcome"}
-    </p>
+        <DisplayCalendar />
+        {/* LEFT CONTENT */}
+        <div>
+          <p className="uppercase text-xs tracking-[3px] mx-1  text-[#2f9bad] mb-3">
+            {listing?.property?.title || "Welcome"}
+          </p>
 
-    <h2 className="text-3xl md:text-5xl font-semibold text-gray-800">
-      {listing?.property?.tagline ||
-        "An incredible vacation spot with something for everyone"}
-    </h2>
+          <h2 className="text-3xl md:text-5xl font-semibold text-gray-800">
+            {listing?.property?.tagline ||
+              "Modern Comfort Meets Relaxing Living"}
+          </h2>
 
-    <p className="text-gray-600 text-base mt-2">
-      {listing?.property?.summary ||
-        "3BR/3BA • Beach • Pool • Lagoon Front • And More"}
-    </p>
-    <Link to={"/booking-policy"}>
-      <button className="px-6 py-3 mt-3 bg-yellow-400 text-black rounded-full font-semibold hover:scale-105 transition">Booking Policy</button>
-      </Link>
-  </div>
+          <p className="text-gray-600 text-base mt-2">
+            {listing?.property?.summary ||
+              "10BR/3BA • Pool • Lagoon Front"}
+          </p>
+          <Link to={"/booking-policy"}>
+            <button className="px-6 py-3 mt-3 bg-[#FFE8BE] text-black rounded-full font-semibold hover:scale-105 transition">
+              Booking Policy
+            </button>
+          </Link>
+        </div>
 
-
-  {/* RIGHT CALENDAR */}
-  
-    <DisplayCalendar />
-
-
-</div>
+      
+      </div>
 
       {/* ================= BOTTOM ================= */}
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 mt-20 items-center">
-        {/* IMAGE */}
-        <div className="relative group overflow-hidden rounded-2xl">
-          <img
-            src={image}
-            alt="property"
-            className="w-full h-[280px] sm:h-[380px] md:h-[450px] object-cover transition duration-700 group-hover:scale-110"
-          />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-
-          {/* <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium shadow">
-            {listing?.property?.tag || "Premium Property"}
-          </div> */}
-        </div>
-
-        {/* TEXT */}
+          {/* TEXT */}
         <div>
-           <p className="uppercase text-xs tracking-[3px] text-yellow-500 mb-3">About us</p>
+          <p className="uppercase text-xs tracking-[3px] text-[#2f9bad]
+  mb-3">
+            About us
+          </p>
           <h3 className="text-3xl md:text-5xl font-semibold text-gray-800 mb-8">
             About this Property
           </h3>
           <p className="text-gray-600 leading-relaxed ">
-            I am semi-retired I live in Panama City Beach. I love PCB and
-            decided to move here from Atlanta in 2007. I have several friends
-            that also moved here at the same time we all get together on the
-            weekend and enjoy the beach or go out on someones boat. There is
-            nothing more relaxing than being at the beach every weekend or being
-            able to watch the sunsets everyday if possible. The beach is my
-            serenity and my happy place. You will not be disappointed if you
-            visit Panama City Beach and enjoy the sugar white sand and your stay
-            at the Summit with all the amenity.
+           This spacious and beautifully designed vacation home offers the perfect blend of comfort, luxury, and convenience for large groups and families. With multiple bedrooms, modern interiors, and an open living space, it creates a welcoming environment for relaxation and connection. The fully equipped kitchen with premium appliances makes cooking an enjoyable experience, while large windows provide stunning views of the outdoor pool area. Additional features like multiple laundry spaces, private guest accommodation, and ample parking ensure a hassle-free stay. Located close to top dining, shopping, and entertainment spots, this property is an ideal choice for creating unforgettable memories.
           </p>
 
           {/* <div
@@ -140,14 +131,36 @@ export default function  AboutSection({ listingId }) {
            
           /> */}
           <div className="p-3 flex mx-[-12px]">
-            <p className="text-green-500 ">Ann McDaniel Phillips</p> &nbsp; - &nbsp;{" "}
-            <span className="font-bold  uppercase">owner</span>
+             <span className="font-bold  uppercase">owner&nbsp; -
+            &nbsp;</span><p className="text-[#2f9bad] ">Nick Nuccio</p> 
           </div>
 
-        <Link to={"/about"}>  <button className="px-6 py-3 bg-yellow-400 text-black rounded-full font-semibold hover:scale-105 transition">
-            Know More →
-          </button></Link>
+          <Link to={"/about"}>
+            {" "}
+            <button className="px-6 py-3 bg-[#FFE8BE] text-black rounded-full font-semibold hover:scale-105 transition">
+              Know More →
+            </button>
+          </Link>
         </div>
+        {/* IMAGE */}
+        <div className="relative group overflow-hidden rounded-2xl">
+          <img
+            src={image}
+            alt="property"
+            className="w-full h-[280px] sm:h-[380px] md:h-[450px] object-cover transition duration-700 group-hover:scale-110"
+            onError={(e) => {
+              e.target.src = "https://via.placeholder.com/600x400";
+            }}
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+
+          {/* <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium shadow">
+            {listing?.property?.tag || "Premium Property"}
+          </div> */}
+        </div>
+
+      
       </div>
     </section>
   );

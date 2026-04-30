@@ -68,10 +68,11 @@ const getDayClass = (date) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 bg-red-500 rounded"></span>
+            <span className="w-3 h-3 bg-[#5C5CFF] rounded"></span>
             Booked
           </div>
         </div>
+       <p className="mt-4 text-center"><span className="text-[#2f9bad]">Check-in :</span> 4:30 PM  / <span className="text-[#2f9bad]">Check-out:</span> 9:00 AM</p> 
 
       </div>
 
@@ -143,7 +144,7 @@ const getDayClass = (date) => {
 }
 
 .react-datepicker__day.blocked-day {
-  background: #ff4d4f !important;
+  background: #5C5CFF !important;
   color: white !important;
 }
 

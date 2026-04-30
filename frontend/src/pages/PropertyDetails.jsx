@@ -183,7 +183,7 @@ const PropertyDetail = () => {
 
             return (
               <div key={section.title} className="mb-6">
-                <h5 className="bg-[#185089] text-white p-2 rounded-xl text-lg mb-2">
+                <h5 className="bg-[#2f9bad] text-white p-2 rounded-xl text-lg mb-2">
                   {section.title}
                 </h5>
 
@@ -255,7 +255,8 @@ const PropertyDetail = () => {
                 <div key={review._id} className="mb-8">
                   <div className=" rounded-xl p-6 bg-gray-50">
                     {/* ⭐ RATING */}
-                    <div className="text-yellow-500 text-lg mb-2">
+                    <div className="text-yellow-500
+  text-lg mb-2">
                       {"★".repeat(review.rating)}
                       {"☆".repeat(5 - review.rating)}
                     </div>
@@ -265,6 +266,7 @@ const PropertyDetail = () => {
 
                     {/* MESSAGE */}
                     <p className="text-gray-700 mt-2">{review.message}</p>
+                    <p className="text-gray-700 mt-2">-{review.name}</p>
 
                     {/* 🔥 ADMIN REPLY (ADD THIS) */}
                     {review.reply && (
@@ -283,7 +285,7 @@ const PropertyDetail = () => {
 
           <button
             onClick={() => setOpenReview(true)}
-            className="mt-6 bg-[#185089] text-white px-6 py-2 rounded"
+            className="mt-6 bg-[#FFE8BE] text-black px-6 py-2 rounded"
           >
             Write a Review
           </button>

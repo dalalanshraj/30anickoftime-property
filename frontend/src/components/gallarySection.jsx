@@ -7,31 +7,37 @@ export default function GallerySection() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
+  const BASE_URL =
+    import.meta.env.VITE_API_URL || "https://annmcdaniel.mysawgrasspointe.com";
+
+  const getImageUrl = (path) => {
+    if (!path || typeof path !== "string") return "";
+
+    const base = import.meta.env.VITE_API_URL || "";
+
+    if (path.startsWith("http")) return path;
+
+    return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+  };
 
   // ===========================
   // FETCH GALLERY IMAGES
   // ===========================
-useEffect(() => {
-  api.get("/gallery/published")
-    .then((res) => {
-      const data = res.data || [];
+  useEffect(() => {
+    api
+      .get("/gallery/published")
+      .then((res) => {
+        const data = res.data || [];
 
-      const formatted = data.map((img) => {
-        const path = img.image.startsWith("/")
-          ? img.image
-          : "/" + img.image;
+        const formatted = data.map((img) => getImageUrl(img.image));
 
-        return `https://annmcdaniel.mysawgrasspointe.com${path}`;
-      });
+        console.log("IMAGES:", formatted);
 
-      console.log("IMAGES:", formatted);
-
-      setImages(formatted);
-    })
-    .catch(console.log)
-    .finally(() => setLoading(false));
-}, []);
+        setImages(formatted);
+      })
+      .catch(console.log)
+      .finally(() => setLoading(false));
+  }, []);
 
   // ===========================
   // AUTO SLIDE
@@ -48,9 +54,7 @@ useEffect(() => {
 
   // NAVIGATION
   const prevSlide = () => {
-    setCurrent((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
@@ -70,13 +74,15 @@ useEffect(() => {
 
   return (
     <section className="w-full py-12 px-6 md:px-16">
-<p className="uppercase text-xs text-center tracking-[3px] text-yellow-500 mb-3">Gallery</p>
-      <h2 className="text-3xl text-center font-semibold text-center mb-6">
+      <p className="uppercase text-xs text-center tracking-[3px] text-[#2f9bad]
+  mb-3">
+        Gallery
+      </p>
+      <h2 className="text-3xl text-center md:text-5xl font-semibold text-gray-800 mb-8">
         Property Gallery
       </h2>
 
       <div className="relative w-full h-[250px] sm:h-[350px] md:h-[500px] overflow-hidden rounded-2xl">
-
         {/* SLIDES */}
         <div
           className="flex h-full transition-transform duration-700 ease-in-out"
@@ -86,10 +92,12 @@ useEffect(() => {
         >
           {images.map((img, i) => (
             <img
-              key={i}
               src={img}
               alt="gallery"
               className="w-full flex-shrink-0 object-cover"
+              onError={(e) => {
+                e.target.src = "/placeholder.png";
+              }}
             />
           ))}
         </div>
@@ -122,7 +130,6 @@ useEffect(() => {
             ></div>
           ))}
         </div>
-
       </div>
     </section>
   );
