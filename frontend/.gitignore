@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
-backend/.env
+backend/.envgit add .
+git commit -m "Removed .env from repo"
 node_modules
