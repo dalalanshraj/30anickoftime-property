@@ -8,8 +8,21 @@ const AdminRoute = ({ children }) => {
     localStorage.getItem("user")
   );
 
-  console.log("TOKEN:", token);
-  console.log("USER:", user);
+  if (
+    !token ||
+    !user ||
+    (
+      user.role !== "admin" &&
+      user.role !== "superadmin"
+    )
+  ) {
+    return (
+      <Navigate
+        to="/admin/login"
+        replace
+      />
+    );
+  }
 
   return children;
 };
