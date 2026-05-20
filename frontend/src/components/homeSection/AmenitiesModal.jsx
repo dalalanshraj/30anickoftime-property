@@ -1,39 +1,80 @@
-import { getIcon } from "../../utils/getIcon";
-
-export default function AmenitiesModal({ amenities, onClose }) {
+export default function AmenitiesModal({
+  amenities,
+  onClose,
+}) {
   return (
-   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-
-      <div className="bg-white w-[90%] max-w-4xl rounded-2xl p-6 relative max-h-[90vh] overflow-y-auto">
-
+    <div
+      className="
+      fixed 
+      inset-0 
+      bg-black/50 
+      flex 
+      items-center 
+      justify-center 
+      z-50
+      p-4
+    "
+    >
+      <div
+        className="
+        bg-white 
+        w-full 
+        max-w-5xl 
+        rounded-3xl 
+        p-8 
+        relative 
+        max-h-[90vh] 
+        overflow-y-auto
+      "
+      >
         {/* CLOSE */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-xl"
+          className="
+          absolute 
+          top-5 
+          right-5 
+          text-2xl
+          hover:rotate-90
+          transition-all
+          duration-300
+        "
         >
           ✕
         </button>
 
-        <h2 className="text-2xl font-semibold mb-6">
+        {/* TITLE */}
+        <h2
+          className="
+          text-3xl 
+          md:text-4xl 
+          font-semibold 
+          text-gray-800 
+          mb-10
+        "
+        >
           Amenities ({amenities.length})
         </h2>
 
         {/* GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6">
-
-          {amenities.map((name, i) => {
-            const Icon = getIcon(name);
-
-            return (
-              <div key={i} className="flex items-center gap-3">
-                <Icon size={20} />
-                <span className="text-gray-700">{name}</span>
-              </div>
-            );
-          })}
-
+        <div
+          className="
+          grid 
+          grid-cols-1 
+          sm:grid-cols-2 
+          md:grid-cols-3 
+          gap-5
+        "
+        >
+          {amenities.map((name, i) => (
+            <div
+              key={i}
+              className="text-black font-medium text-xl"
+            >
+              {name}
+            </div>
+          ))}
         </div>
-
       </div>
     </div>
   );

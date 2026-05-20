@@ -196,7 +196,7 @@ const PropertyDetail = () => {
             );
           })}
           {/* Activities */}
-         
+
           {activitiesData.map((section) => {
             const selected = section.options.filter(
               (item) => listing.activities?.[item],
@@ -204,9 +204,8 @@ const PropertyDetail = () => {
             if (selected.length === 0) return null;
 
             return (
-              
               <div key={section.title} className="mb-6">
-                 <h2 className="text-2xl font-semibold mt-8 mb-4">Activities</h2>
+                <h2 className="text-2xl font-semibold mt-8 mb-4">Activities</h2>
                 <h5 className="bg-[#2f9bad] text-white p-2 rounded-xl text-lg mb-2">
                   {section.title}
                 </h5>
@@ -257,8 +256,10 @@ const PropertyDetail = () => {
                 <div key={review._id} className="mb-8">
                   <div className=" rounded-xl p-6 bg-gray-50">
                     {/* ⭐ RATING */}
-                    <div className="text-yellow-500
-  text-lg mb-2">
+                    <div
+                      className="text-yellow-500
+  text-lg mb-2"
+                    >
                       {"★".repeat(review.rating)}
                       {"☆".repeat(5 - review.rating)}
                     </div>
@@ -291,18 +292,18 @@ const PropertyDetail = () => {
           >
             Write a Review
           </button>
- 
+
           {openReview && (
             <ReviewModal listingId={id} onClose={() => setOpenReview(false)} />
           )}
-        </div> 
+        </div>
 
         {/* RIGHT BOOKING */}
         {/* CALENDAR */}
 
         <div className="lg:col-span-1">
           <div className="sticky top-[100px] bg-white rounded-3xl shadow-xl p-6 ">
-            <PropertyminiCalendar />
+            <PropertyminiCalendar listingId={listing._id} />
           </div>
         </div>
       </div>

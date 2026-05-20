@@ -2,7 +2,7 @@ import ical from "node-ical";
 
 export const getBlockedDates = async (req, res) => {
   try {
-    const url = "https://ical.emeraldcoastbyowner.com/icalfile/8140"; // 👈 client का link
+    const url = ""; 
 
     const data = await ical.async.fromURL(url);
 

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import imgthree from "../assets/4-2.jpg";
 
 export default function Gallery() {
-  const [images, setImages] = useState([]);
+const [images, setImages] = useState([]);
   const [active, setActive] = useState(null);
 
   const getImageUrl = (path) => {
@@ -20,9 +21,20 @@ export default function Gallery() {
   useEffect(() => {
     api
       .get("/gallery/published")
-      .then((res) => setImages(res.data))
+      .then((res) => {
+        setImages(res.data);
+        console.log(res.data);
+      })
       .catch(console.log);
   }, []);
+
+
+  const image1 =
+  imgthree;
+
+
+
+const image3 = images[4]?.images || image1;
 
   return (
     <>
@@ -31,10 +43,9 @@ export default function Gallery() {
         {/* BG IMAGE */}
         <div
           className="absolute inset-0 bg-fixed bg-center bg-cover"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1505691938895-1758d7feb511')",
-          }}
+           style={{
+    backgroundImage: `url(${imgthree})`,
+  }}
         />
 
         {/* DARK OVERLAY */}

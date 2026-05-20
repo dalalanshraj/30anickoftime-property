@@ -138,11 +138,11 @@ calendar: {
         },
       },
 
-      status: {
-        type: String,
-        enum: ["A", "R", "H"], // Available / Reserved / Hold
-        default: "A",
-      },
+     status: {
+  type: String,
+  enum: ["A", "R", "H", "CIN", "COUT"], 
+  default: "A",
+},
 
       source: {
         type: String,
@@ -155,6 +155,11 @@ calendar: {
   ],
   default: [],
 },
+icalUrl: {
+  type: String,
+  default: "",
+},
+
 
   },
   

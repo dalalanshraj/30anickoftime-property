@@ -1,89 +1,205 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../api/axios";
 import emailjs from "@emailjs/browser";
 import modelImg from "../assets/img3.jpg";
 
+
 export default function BookingModalContact({ listingId, onClose }) {
-  const [blockedDates, setBlockedDates] = useState([]);
+  const [calendarDates, setCalendarDates] = useState([]);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
   const [selecting, setSelecting] = useState("checkIn");
 
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [loading , setLoading] = useState("")
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
-    adults: "1",
-    kids: "0",
+    adults: 1,
+    kids: 0,
     checkIn: null,
     checkOut: null,
     message: "",
   });
 
-  const fetchDates = () => {
-    api
-      .get("/calendar/blocked")
-      .then((res) => setBlockedDates(res.data))
-      .catch(console.log);
-  };
+  // =====================================
+  // FETCH CALENDAR
+  // =====================================
 
   useEffect(() => {
-    fetchDates();
-  }, []);
-
-  const isBlocked = (date) => {
-    return blockedDates.some((r) => {
-      const s = new Date(r.start);
-      const e = new Date(r.end);
-      return date >= s && date < e;
-    });
-  };
-
-  const isRangeValid = (start, end) => {
-    if (!start || !end) return false;
-
-    return !blockedDates.some((r) => {
-      const s = new Date(r.start);
-      const e = new Date(r.end);
-      return start < e && end > s;
-    });
-  };
-const isSameDay = (a, b) =>
-  a.toDateString() === b.toDateString();
-  const getDateType = (date) => {
-
-  // 🔥 turnover first
-  for (let i = 0; i < blockedDates.length; i++) {
-    const currentEnd = new Date(blockedDates[i].end);
-
-    for (let j = 0; j < blockedDates.length; j++) {
-      const nextStart = new Date(blockedDates[j].start);
-
-      const diff =
-        (nextStart - currentEnd) / (1000 * 60 * 60 * 24);
-
-      if ((diff === 0 || diff === 1) && isSameDay(date, currentEnd)) {
-        return "turnover-day";
-      }
+    if (listingId) {
+      fetchDates();
     }
+  }, [listingId]);
+
+  const fetchDates = async () => {
+    try {
+      const res = await api.get(`/calendar/${listingId}/calendar`);
+
+      setCalendarDates(res.data.calendar || []);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // =====================================
+  // DATE FORMAT
+  // =====================================
+
+  
+
+  // =====================================
+  // MAP
+  // =====================================
+
+const formatLocalDate = (date) => {
+
+  return new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone: "America/Chicago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }
+  ).format(new Date(date));
+
+};
+
+// =====================================
+// BLOCKED MAP
+// =====================================
+
+const blockedMap = useMemo(() => {
+
+  const map = {};
+
+  calendarDates.forEach((item) => {
+
+    const itemDate = new Date(
+      new Date(item.date).toLocaleString(
+        "en-US",
+        {
+          timeZone: "America/Chicago",
+        }
+      )
+    );
+
+    const key =
+      formatLocalDate(itemDate);
+
+    if (!map[key]) {
+      map[key] = [];
+    }
+
+    map[key].push(item.status);
+
+  });
+
+  return map;
+
+}, [calendarDates]);
+
+// =====================================
+// DATE TYPE
+// =====================================
+
+const getDateType = useCallback((date) => {
+
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  const currentDate = new Date(date);
+
+  currentDate.setHours(0, 0, 0, 0);
+
+  // PAST
+  if (currentDate < today) {
+    return "past-day";
   }
 
-  // normal
-  for (let r of blockedDates) {
-    const start = new Date(r.start);
-    const end = new Date(r.end);
+  // CURRENT KEY
+  const currentKey =
+    formatLocalDate(currentDate);
 
-    if (isSameDay(date, start)) return "checkin-day";
-    if (isSameDay(date, end)) return "checkout-day";
-    if (date > start && date < end) return "blocked-day";
+  const statuses =
+    blockedMap[currentKey] || [];
+
+  const hasCIN =
+    statuses.includes("CIN");
+
+  const hasCOUT =
+    statuses.includes("COUT");
+
+  const hasR =
+    statuses.includes("R");
+
+  const hasH =
+    statuses.includes("H");
+
+  // =====================================
+  // PREVIOUS DAY
+  // =====================================
+
+  const prevDay = new Date(currentDate);
+
+  prevDay.setDate(
+    prevDay.getDate() - 1
+  );
+
+  const prevKey =
+    formatLocalDate(prevDay);
+
+  const prevStatuses =
+    blockedMap[prevKey] || [];
+
+  const prevHasBooking =
+    prevStatuses.includes("R") ||
+    prevStatuses.includes("COUT");
+
+  // =====================================
+  // TURNOVER
+  // =====================================
+
+  // SAME DAY
+  if (hasCIN && hasCOUT) {
+    return "turnover-day";
+  }
+
+  // PREVIOUS DAY BOOKED
+  // + CURRENT CHECKIN
+  if (hasCIN && prevHasBooking) {
+    return "turnover-day";
+  }
+
+  // CHECK-IN
+  if (hasCIN) {
+    return "checkin-day";
+  }
+
+  // CHECK-OUT
+  if (hasCOUT) {
+    return "checkout-day";
+  }
+
+  // BOOKED
+  if (hasR) {
+    return "blocked-day";
+  }
+
+  // HOLD
+  if (hasH) {
+    return "hold-day";
   }
 
   return "available-day";
-};
+
+}, [blockedMap]);
 
  const handleSubmit = async (e) => {
   e.preventDefault();
@@ -318,36 +434,170 @@ const isSameDay = (a, b) =>
       </div>
 
       {/* ✅ STYLE FIX */}
-      <style>{`
-      .react-datepicker__day.past-day {
-        background: #eee !important;
-        color: #999 !important;
-        pointer-events: none;
-      }
+      {/* STYLES */}
+      <style>{` 
+     
 
-      .react-datepicker__day.blocked-day {
-        background: #5C5CFF !important;
-        color: white !important;
-        text-decoration: line-through;
-        border-radius: 6px;
-      }
+.react-datepicker {
+  border: none;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+}
 
-      .react-datepicker__day.available-day {
-        background: #e6fffb !important;
-        border-radius: 6px;
-      }
+.react-datepicker__header {
+  background: white;
+  border-bottom: none;
+}
 
-      .react-datepicker__day.selected-range {
-        background: #1890ff !important;
-        color: white !important;
-        border-radius: 6px;
-      }
+.react-datepicker__current-month {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
 
-      .react-datepicker__day:hover {
-        background: #6366f1 !important;
-        color: white !important;
-      }
-    `}</style>
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-between;
+}
+
+.react-datepicker__day,
+.react-datepicker__day-name {
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  margin: 2px;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* AVAILABLE */
+.react-datepicker__day.available-day {
+  background: #d1fae5 !important;
+  color: black !important;
+}
+
+/* BOOKED */
+.react-datepicker__day.blocked-day {
+  background: #5C5CFF !important;
+  color: white !important;
+}
+
+/* HOLD */
+.react-datepicker__day.hold-day {
+  background: #facc15 !important;
+  color: black !important;
+}
+
+/* CHECK-IN */
+.react-datepicker__day.checkin-day {
+
+  background: linear-gradient(
+    135deg,
+    #d1fae5 50%,
+    #5C5CFF 50%
+  ) !important;
+
+  color: black !important;
+}
+
+/* CHECK-OUT */
+.react-datepicker__day.checkout-day {
+
+  background: linear-gradient(
+    315deg,
+    #d1fae5 50%,
+    #5C5CFF 50%
+  ) !important;
+
+  color: black !important;
+}
+
+.react-datepicker__day.turnover-day {
+
+  position: relative !important;
+
+  isolation: isolate;
+
+  overflow: hidden !important;
+
+  color: black !important;
+
+  z-index: 10 !important;
+}
+
+.react-datepicker__day.turnover-day::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 8px;
+
+  background: linear-gradient(
+    to bottom right,
+    #5C5CFF 0%,
+    #5C5CFF 49%,
+    #5C5CFF 51%,
+    #5C5CFF 100%
+  );
+
+  z-index: -1;
+}
+
+.react-datepicker__day.turnover-day::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180%;
+
+  height: 3px;
+
+  background: black;
+
+  top: 50%;
+
+  left: -40%;
+
+  transform: rotate(-45deg);
+
+  z-index: 20;
+}
+  
+
+/* TEXT ABOVE */
+.react-datepicker__day.turnover-day span,
+.react-datepicker__day.turnover-day {
+
+  position: relative;
+
+  z-index: 10;
+}
+
+/* PAST */
+.react-datepicker__day.past-day {
+
+  background: #f1f5f9 !important;
+
+  color: #94a3b8 !important;
+
+  opacity: 0.7 !important;
+
+  cursor: not-allowed !important;
+}
+
+/* OUTSIDE */
+.react-datepicker__day--outside-month {
+
+  visibility: hidden !important;
+
+  pointer-events: none !important;
+}
+
+      `}</style>
     </>
   );
 }

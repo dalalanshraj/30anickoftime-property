@@ -9,6 +9,16 @@ export default function ListingCard({
 
   if (!listing) return null;
 
+  const getImageUrl = (path) => {
+    if (!path || typeof path !== "string") return "";
+
+    const base = import.meta.env.VITE_API_URL || "";
+
+    if (path.startsWith("http")) return path;
+
+    return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+  };
+
   const image =
     listing?.photos?.length > 0
       ? `${import.meta.env.VITE_API_URL}${listing.photos[0]}`

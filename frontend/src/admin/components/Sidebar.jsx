@@ -75,7 +75,7 @@ const Sidebar = () => {
           Users
         </NavLink>
 
-        {/* <NavLink to="/admin/listings/property_add" className={linkClass}>
+         {/* <NavLink to="/admin/listings/property_add" className={linkClass}>
           <MdAddBox size={20} />
           Add Listing
         </NavLink> */}

@@ -49,7 +49,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between px-6 md:px-12 py-4 text-white">
         
         {/* Logo */}
-        <div className="w-41">
+        <div className="w-35">
          <Link to ={"/"}><img src={logo} alt="logo" srcset="" /></Link>
         </div>
 

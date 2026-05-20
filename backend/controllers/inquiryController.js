@@ -28,8 +28,19 @@ export const createInquiry = async (req, res) => {
       Kids,
     });
 
-    const populatedInquiry = await Inquiry.findById(inquiry._id)
-      .populate("property", "title");
+  const populatedInquiry = await Inquiry.findById(inquiry._id)
+  .populate({
+  path: "property",
+  select: "property.title",
+})
+  .lean();
+
+console.log("👉 RAW PROPERTY ID:", property);
+
+const listingCheck = await mongoose.model("Listing").findById(property);
+console.log("👉 LISTING FOUND:", listingCheck);
+
+console.log("👉 POPULATED RESULT:", populatedInquiry);
 
     res.status(201).json({
       message: "Inquiry submitted successfully",

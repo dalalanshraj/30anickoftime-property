@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import imgthree from "../assets/4-2.jpg";
+
 
 export default function About() {
   const [images, setImages] = useState([]);
@@ -28,13 +30,12 @@ export default function About() {
   }, []);
 
   // 👉 fallback images (important)
-  const image1 =
-    images[0] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
 
+const image1 = imgthree;
   const image2 =
     images[1] || "https://images.unsplash.com/photo-1560185007-cde436f6a4d0";
 
-  const heroImage = images[2] || image1;
+ 
 
   return (
     <>
@@ -43,7 +44,7 @@ export default function About() {
         <div
           className="absolute inset-0 bg-fixed bg-cover bg-center"
           style={{
-            backgroundImage: `url(${heroImage})`,
+            backgroundImage: `url(${image1})`,
           }}
         />
 

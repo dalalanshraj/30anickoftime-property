@@ -80,7 +80,7 @@ export default function AboutSection({ listingId }) {
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* RIGHT CALENDAR */}
 
-        <DisplayCalendar />
+        <DisplayCalendar listingId={listing._id} />
         {/* LEFT CONTENT */}
         <div>
           <p className="uppercase text-xs tracking-[3px] mx-1  text-[#2f9bad] mb-3">

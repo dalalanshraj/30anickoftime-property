@@ -67,9 +67,9 @@
         </div>
 
         {/* ===== CHARTS ===== */}
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* <div className="grid md:grid-cols-2 gap-8">
 
-          {/* ===== DONUT CHART ===== */}
+          ===== DONUT CHART =====
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@
                   ))}
                 </Pie>
 
-                {/* CENTER VALUE */}
+              
                 <text
                   x="50%"
                   y="50%"
@@ -109,7 +109,7 @@
             </ResponsiveContainer>
           </motion.div>
 
-          {/* ===== LINE GRAPH ===== */}
+          ===== LINE GRAPH ===== 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -144,7 +144,7 @@
             )}
           </motion.div>
 
-        </div>
+        </div> */}
 
         {/* ===== MINI STATS ===== */}
         <div className="grid md:grid-cols-2 gap-6 mt-10">

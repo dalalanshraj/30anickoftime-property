@@ -192,9 +192,9 @@ export default function Hero() {
         </div>
       </section>
 
-      <AmenitiesSection />
+      <AmenitiesSection listingId="69f0c3cd2203c21d5f9f323f" />
       <GallerySection />
-      <ReviewsSection />
+      <ReviewsSection listingId="69f0c3cd2203c21d5f9f323f" />
     </>
   );
 }

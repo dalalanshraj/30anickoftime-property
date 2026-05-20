@@ -7,6 +7,8 @@ import {
   unblockDates,
   cleanDuplicateCalendar,
   clearCalendar,
+  importICal,
+  resetICal,
 } from "../controllers/calendarController.js";
 import { isAuth, isAdmin } from "../middleware/authMiddleware.js";
 
@@ -31,5 +33,7 @@ router.post("/:id/calendar/unblock", isAuth, isAdmin, unblockDates);
 
 router.put("/:id/calendar/clean-duplicates", cleanDuplicateCalendar);
 router.put("/:id/calendar/clear", clearCalendar);
+router.post("/:id/calendar/import-ical", isAuth, isAdmin, importICal);
+router.put("/:id/calendar/reset-ical", resetICal);
 
 export default router;

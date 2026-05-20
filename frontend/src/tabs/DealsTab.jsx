@@ -102,7 +102,7 @@ export default function DealsTab({ listingId }) {
                 {deals.length === 0 && (
                     <button
                         onClick={() => setShowForm(true)}
-                        className="flex items-center gap-2 bg-blue-600 text-black px-4 py-2 rounded"
+                        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded"
                     >
                         <FaPlus />
                         Add Deal

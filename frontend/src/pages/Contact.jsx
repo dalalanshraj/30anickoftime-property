@@ -6,6 +6,7 @@ import { IoLocation } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
+import imgthree from "../assets/4-2.jpg";
 
 export default function Contact() {
   const [blockedDates, setBlockedDates] = useState([]);
@@ -173,15 +174,16 @@ export default function Contact() {
       ? Math.ceil((form.checkOut - form.checkIn) / (1000 * 60 * 60 * 24))
       : 0;
 
+      const image1 = imgthree;
+
   return (
     <>
       {/* 🔥 HERO */}
       <section className="relative h-[50vh] flex items-center justify-center text-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1505691938895-1758d7feb511')",
+           style={{
+            backgroundImage: `url(${image1})`,
           }}
         />
         <div className="absolute inset-0 bg-black/60" />
