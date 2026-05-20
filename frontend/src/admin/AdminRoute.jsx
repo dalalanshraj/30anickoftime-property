@@ -1,30 +1,22 @@
 import { Navigate } from "react-router-dom";
 
 const AdminRoute = ({ children }) => {
-
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
-
-  if (
-    !token ||
+   if (
     !user ||
     (
       user.role !== "admin" &&
       user.role !== "superadmin"
     )
   ) {
-    return (
-      <Navigate
-        to="/admin/login"
-        replace
-      />
-    );
+    return <Navigate to="/admin/login" />;
   }
 
+  // ✅ allow
   return children;
 };
+
 
 export default AdminRoute;
