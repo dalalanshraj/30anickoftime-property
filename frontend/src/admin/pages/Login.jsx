@@ -40,8 +40,7 @@ const Login = () => {
 );
 
       // ✅ REDIRECT
-      window.location.href =
-  "/admin/dashboard";
+      navigate("/admin/dashboard");
 
     } catch (err) {
       console.log(err);
