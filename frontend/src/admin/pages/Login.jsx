@@ -38,7 +38,6 @@ const Login = () => {
     role: res.data.role,
   })
 );
-
       // ✅ REDIRECT
       navigate("/admin/dashboard");
 
