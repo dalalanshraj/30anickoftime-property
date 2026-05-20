@@ -70,16 +70,10 @@ function App() {
         <Route path="/admin/login" element={<Login />} />
 
         {/* ADMIN PAGES */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <AdminRoute>
-              <AdminLayout>
-                <Dashboard />
-              </AdminLayout>
-            </AdminRoute>
-          }
-        />
+       <Route
+  path="/admin/dashboard"
+  element={<Dashboard />}
+/>
 
         <Route
           path="/admin/listings"
