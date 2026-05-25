@@ -212,7 +212,7 @@ export default function Contact() {
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <IoLocation size={20} className="text-red-500" />
                 <p className="text-sm md:text-base">
-                  75 Hidden Lake Way, Santa Rosa Beach, FL 32459, USA
+                  Santa Rosa Beach, FL 32459,
                 </p>
               </div>
 
