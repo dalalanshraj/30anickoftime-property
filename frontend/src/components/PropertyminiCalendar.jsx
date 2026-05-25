@@ -298,7 +298,7 @@ const blockedMap = useMemo(() => {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to bottom right, #5C5CFF 49%, #d1fae5 51%)",
+                  "linear-gradient(to bottom right, #5C5CFF 49%, #5C5CFF 51%)",
               }}
             ></span>
 

@@ -52,7 +52,7 @@ function App() {
           <Route path="/:id" element={<PropertyDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/about" element={<About />} />
-          <Route path="/contect-us" element={<Contact />} />  
+          <Route path="/contect-us" element={<Contact listingId="69f0c3cd2203c21d5f9f323f" />} />  
           <Route path="/booking-policy" element={<BookingPolicy />}/>  
         {/* <Route path="/properties" element={<Properties />} />
         <Route path="/results" element={<Results />} />
@@ -150,7 +150,7 @@ function App() {
 
 
       {/* FRONTEND ONLY */}
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <Footer listingId="69f0c3cd2203c21d5f9f323f"/>}
     </>
   );
 }

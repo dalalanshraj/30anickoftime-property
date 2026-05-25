@@ -8,8 +8,9 @@ import { FaPhoneAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 import imgthree from "../assets/4-2.jpg";
 
-export default function Contact() {
-  const [blockedDates, setBlockedDates] = useState([]);
+export default function Contact({listingId}) {
+ const [calendarDates, setCalendarDates] = useState([]);
+ const [listing, setListing] = useState(null);
   const [selecting, setSelecting] = useState("checkIn");
   const [status, setStatus] = useState({
     type: "", // success | error
@@ -28,52 +29,138 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
 
-  // 🔥 FETCH BLOCKED DATES (ICAL API)
   useEffect(() => {
-    api
-      .get("/calendar/blocked")
-      .then((res) => setBlockedDates(res.data))
-      .catch(console.log);
-  }, []);
 
-  // 🔥 CHECK BLOCKED
-  const isBlocked = (date) => {
-    return blockedDates.some((r) => {
-      const s = new Date(r.start);
-      const e = new Date(r.end);
-      return date >= s && date < e;
-    });
-  };
-  const isSameDay = (a, b) => a.toDateString() === b.toDateString();
+  if (!listingId) return;
+
+  api
+    .get(`/listings/${listingId}`)
+
+    .then((res) => {
+
+    
+
+      setListing(res.data);
+
+    })
+
+    .catch(console.log);
+
+}, [listingId]);
+
+const locationName =
+  listing?.location?.address ||
+  "Location not available";
+
+const email =
+  listing?.property?.altEmail ||
+  "Email not available";
+
+const phone =
+  listing?.property?.altPhone ||
+  "Phone not available";
+
+  // 🔥 FETCH BLOCKED DATES (ICAL API)
+  const LISTING_ID = "69f0c3cd2203c21d5f9f323f";
+
+useEffect(() => {
+
+  api
+    .get(`/calendar/${LISTING_ID}/calendar`)
+    .then((res) => {
+
+      setCalendarDates(
+        res.data.calendar || []
+      );
+
+    })
+    .catch(console.log);
+
+}, []);
+
+
+ const normalizeDate = (date) => {
+
+  const d = new Date(date);
+
+  return `${d.getFullYear()}-${
+    d.getMonth()
+  }-${d.getDate()}`;
+
+};
   // 🔥 DAY STYLE
   const getDateType = (date) => {
-    // 🔥 turnover first
-    for (let i = 0; i < blockedDates.length; i++) {
-      const currentEnd = new Date(blockedDates[i].end);
 
-      for (let j = 0; j < blockedDates.length; j++) {
-        const nextStart = new Date(blockedDates[j].start);
+  const today = new Date();
 
-        const diff = (nextStart - currentEnd) / (1000 * 60 * 60 * 24);
+  today.setHours(0, 0, 0, 0);
 
-        if ((diff === 0 || diff === 1) && isSameDay(date, currentEnd)) {
-          return "turnover-day";
-        }
-      }
-    }
+  const currentDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
 
-    // normal
-    for (let r of blockedDates) {
-      const start = new Date(r.start);
-      const end = new Date(r.end);
+  // PAST
+  if (currentDate < today) {
+    return "past-day";
+  }
 
-      if (isSameDay(date, start)) return "checkin-day";
-      if (isSameDay(date, end)) return "checkout-day";
-      if (date > start && date < end) return "blocked-day";
-    }
+  const currentKey =
+    normalizeDate(currentDate);
 
-    return "available-day";
-  };
+  const currentItems =
+    calendarDates.filter(
+      (item) =>
+        normalizeDate(item.date)
+        === currentKey
+    );
+
+  const statuses =
+    currentItems.map(
+      (i) => i.status
+    );
+
+  const hasCIN =
+    statuses.includes("CIN");
+
+  const hasCOUT =
+    statuses.includes("COUT");
+
+  const hasR =
+    statuses.includes("R");
+
+  const hasH =
+    statuses.includes("H");
+
+  // TURNOVER
+  if (hasCIN && hasCOUT) {
+    return "turnover-day";
+  }
+
+  // CHECKOUT
+  if (hasCOUT) {
+    return "checkout-day";
+  }
+
+  // CHECKIN
+  if (hasCIN) {
+    return "checkin-day";
+  }
+
+  // BOOKED
+  if (hasR) {
+    return "blocked-day";
+  }
+
+  // HOLD
+  if (hasH) {
+    return "hold-day";
+  }
+
+  return "available-day";
+
+};
 
   useEffect(() => {
     if (!status.message) return;
@@ -212,20 +299,20 @@ export default function Contact() {
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <IoLocation size={20} className="text-red-500" />
                 <p className="text-sm md:text-base">
-                  Santa Rosa Beach, FL 32459,
+                  {locationName}
                 </p>
               </div>
 
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <MdEmail size={20} className="text-green-500" />
                 <p className="text-sm md:text-base break-all">
-                  ngnuccio@gmail.com
+                  {email}
                 </p>
               </div>
 
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <FaPhoneAlt size={18} className="text-gray-800" />
-                <p className="text-sm md:text-base">+1 (504) 717-6425</p>
+                <p className="text-sm md:text-base"> {phone}</p>
               </div>
             </div>
 
@@ -429,53 +516,116 @@ export default function Contact() {
   color: white !important;
 }
 
-.react-datepicker__day.available-day {
-  background: #d1fae5;
+/* CHECK-IN */
+.react-datepicker__day.checkin-day {
+
+  background: linear-gradient(
+    135deg,
+    #d1fae5 50%,
+    #5C5CFF 50%
+  ) !important;
+
+  color: black !important;
 }
 
-.react-datepicker__day.checkin-day {
+/* CHECK-OUT */
+.react-datepicker__day.checkout-day {
+
   background: linear-gradient(
     315deg,
-    #5C5CFF 50%, 
-     0% , #d1fae5
+    #d1fae5 50%,
+    #5C5CFF 50%
   ) !important;
-   color: black
+
+  color: black !important;
 }
-  .react-datepicker__day.checkout-day {
-  background: linear-gradient(
-     135deg,
-    #5C5CFF 50%,
-    0% , #d1fae5
-  ) !important;
-   color: black
-}
- .react-datepicker__day.turnover-day {
-  background: #5C5CFF !important;
-  position: relative;
+
+.react-datepicker__day.turnover-day {
+
+  position: relative !important;
+
+  isolation: isolate;
+
+  overflow: hidden !important;
+
+  color: black !important;
+
+  z-index: 10 !important;
 }
 
 .react-datepicker__day.turnover-day::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    transparent 48%,
-    white 50%,
-    transparent 52%
-  );
-}
-/* HOVER 
-.react-datepicker__day:hover {
-  background: #6366f1 !important;
-  color: white !important;
-}
-  .react-datepicker__day--outside-month {
-  opacity: 0;
-  pointer-events: none;
-}*/
 
-`}</style>
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 8px;
+
+  background: linear-gradient(
+    to bottom right,
+    #5C5CFF 0%,
+    #5C5CFF 49%,
+    #5C5CFF 51%,
+    #5C5CFF 100%
+  );
+
+  z-index: -1;
+}
+
+.react-datepicker__day.turnover-day::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180%;
+
+  height: 3px;
+
+  background: black;
+
+  top: 50%;
+
+  left: -40%;
+
+  transform: rotate(-45deg);
+
+  z-index: 20;
+}
+  
+
+/* TEXT ABOVE */
+.react-datepicker__day.turnover-day span,
+.react-datepicker__day.turnover-day {
+
+  position: relative;
+
+  z-index: 10;
+}
+
+/* PAST */
+.react-datepicker__day.past-day {
+
+  background: #f1f5f9 !important;
+
+  color: #94a3b8 !important;
+
+  opacity: 0.7 !important;
+
+  cursor: not-allowed !important;
+}
+
+/* OUTSIDE */
+.react-datepicker__day--outside-month {
+
+  visibility: hidden !important;
+
+  pointer-events: none !important;
+}
+
+      `}</style>
     </>
   );
 }

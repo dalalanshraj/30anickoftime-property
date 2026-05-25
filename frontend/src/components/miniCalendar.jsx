@@ -249,7 +249,7 @@ const getDateType = (date) => {
                   "linear-gradient(135deg, #5C5CFF 50%, #d1fae5 50%)",
               }}
             ></span>
-            Check-In
+            Check-Out
           </div>
 
           {/* CHECK-OUT */}
@@ -261,7 +261,7 @@ const getDateType = (date) => {
                   "linear-gradient(315deg, #5C5CFF 50%, #d1fae5 50%)",
               }}
             ></span>
-            Check-Out
+            Check-In
           </div>
 
           {/* TURNOVER */}
@@ -271,7 +271,7 @@ const getDateType = (date) => {
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(135deg, #5C5CFF 50%, #d1fae5 50%)",
+                    "linear-gradient(135deg, #5C5CFF 50%, #5C5CFF 50%)",
                 }}
               ></span>
 

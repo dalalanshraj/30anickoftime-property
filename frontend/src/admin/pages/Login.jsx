@@ -38,6 +38,7 @@ const Login = () => {
     role: res.data.role,
   })
 );
+
       // ✅ REDIRECT
       navigate("/admin/dashboard");
 
@@ -119,7 +120,7 @@ const Login = () => {
         </button>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-         Nick of Time and Love Shack Admin Panel
+         calypso401 Admin Panel
         </p>
 
       </form>

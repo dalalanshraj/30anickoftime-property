@@ -1,20 +1,44 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import imgthree from "../assets/4-2.jpg";
+import AboutSection from "../components/homeSection/About";
+import { Link } from "react-router-dom";
 
-
-export default function About() {
+export default function About({ listingId }) {
   const [images, setImages] = useState([]);
+  const [listing, setListing] = useState(null);
 
-  const getImageUrl = (path) => {
-    if (!path || typeof path !== "string") return "";
+  const getImageUrl = (photo) => {
+  const base =
+    import.meta.env.VITE_API_URL || "";
 
-    const base = import.meta.env.VITE_API_URL || "";
+  // new object format
+  if (photo?.url) {
+    if (photo.url.startsWith("http")) {
+      return photo.url;
+    }
 
-    if (path.startsWith("http")) return path;
+    return (
+      base.replace(/\/$/, "") +
+      "/" +
+      photo.url.replace(/^\//, "")
+    );
+  }
 
-    return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
-  };
+  // old string fallback
+  if (typeof photo === "string") {
+    if (photo.startsWith("http")) {
+      return photo;
+    }
+
+    return (
+      base.replace(/\/$/, "") +
+      "/" +
+      photo.replace(/^\//, "")
+    );
+  }
+
+  return "https://via.placeholder.com/600x400";
+};
 
   useEffect(() => {
     api
@@ -29,13 +53,22 @@ export default function About() {
       .catch(console.log);
   }, []);
 
-  // 👉 fallback images (important)
+  const image =
+    listing?.photos?.length > 0
+      ? getImageUrl(listing.photos[0])
+      : "https://via.placeholder.com/600x400";
 
-const image1 = imgthree;
+  // 👉 fallback images (important)
+  const image1 =
+    images[0] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
+
   const image2 =
     images[1] || "https://images.unsplash.com/photo-1560185007-cde436f6a4d0";
 
- 
+  const image3 = images[4];
+
+  const heroImage = images[2] || image1;
+
 
   return (
     <>

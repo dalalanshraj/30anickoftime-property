@@ -1,15 +1,54 @@
+import api from "../api/axios";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
-import { FiMail, FiPhone } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import { Link, Links } from "react-router-dom";
 import logo from "../assets/logo/LOGO.png";
 
-export default function Footer() {
+
+export default function Footer({listingId}) {
+  const [listing, setListing] = useState(null);
+
+  useEffect(() => {
+
+  if (!listingId) return;
+
+  api
+    .get(`/listings/${listingId}`)
+
+    .then((res) => {
+
+      console.log("LISTING:", res.data);
+
+      setListing(res.data);
+
+    })
+
+    .catch(console.log);
+
+}, [listingId]);
+
+const phone =
+  listing?.property?.altPhone ||
+  listing?.altPhone ||
+  "Phone not available";
+
+const email =
+  listing?.property?.altEmail ||
+  listing?.altEmail ||
+  "Email not available";
+
+const locationName =
+  listing?.location?.address ||
+  listing?.address ||
+  "Location not available";
+
   return (
     <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-12">
         {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10">
           {/* BRAND */}
           <div>
             <div className=" w-30 mb-0">
@@ -53,12 +92,12 @@ export default function Footer() {
             <div className="space-y-3 text-gray-400 text-sm">
               <div className="flex items-center gap-2">
                 <FiPhone />
-                <span>+1 (504) 717-6425</span>
+                <span> {phone}</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <FiMail />
-                <span>ngnuccio@gmail.com</span>
+                <span> {email}</span>
               </div>
             </div>
           </div>
@@ -71,12 +110,7 @@ export default function Footer() {
          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d910.0912488140774!2d-86.2241231303864!3d30.347998698423265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8893e24e34b3b287%3A0x17987ac8d55902ef!2s80%20Brentwood%20Ln%2C%20Santa%20Rosa%20Beach%2C%20FL%2032459%2C%20USA!5e1!3m2!1sen!2sin!4v1777924128610!5m2!1sen!2sin" width="600" height="450">
          
         </iframe>
-                    {/* <Link to="/admin/login">
-              <button className="bg-[#FFE8BE] hover:bg-[#2f9bad] text-sm font-medium px-4 py-2 rounded shadow flex items-center gap-2 mt-1">
-                <MdEmail />
-                Admin Login
-              </button>
-            </Link> */}
+                   
 
             {/* <div className="flex gap-4">
               <a
@@ -101,6 +135,21 @@ export default function Footer() {
               </a>
             </div> */}
           </div>
+           <Link to="/admin/login">
+              <button className="px-8 flex gap-1
+                py-3 
+                rounded-full 
+                bg-[#FFE8BE] 
+                text-black 
+                font-medium 
+                shadow-md 
+                hover:scale-105  
+                transition 
+                duration-300">
+                <MdEmail className="mt-1" />
+                Admin Login
+              </button>
+            </Link>
         </div>
 
         {/* BOTTOM */}

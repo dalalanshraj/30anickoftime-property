@@ -19,13 +19,40 @@ export default function Hero() {
   const [offset, setOffset] = useState(0);
   const [featured, setFeatured] = useState(null);
   const [open, setOpen] = useState(false);
-  // const [listing, setListing] = useState(null);
+  const [listing, setListing] = useState(null);
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  const BASE_URL =
+  import.meta.env.VITE_API_URL || "";
 
-  // ✅ Helper (safe URL)
-  const getImageUrl = (path) => `${BASE_URL?.replace(/\/$/, "")}${path}`;
+const getImageUrl = (photo) => {
+  // object format
+  if (photo?.url) {
+    if (photo.url.startsWith("http")) {
+      return photo.url;
+    }
 
+    return (
+      BASE_URL.replace(/\/$/, "") +
+      "/" +
+      photo.url.replace(/^\//, "")
+    );
+  }
+
+  // string format
+  if (typeof photo === "string") {
+    if (photo.startsWith("http")) {
+      return photo;
+    }
+
+    return (
+      BASE_URL.replace(/\/$/, "") +
+      "/" +
+      photo.replace(/^\//, "")
+    );
+  }
+
+  return bgImagetwo;
+};
   // ===========================
   // FETCH FEATURED LISTING
   // ===========================
@@ -42,9 +69,19 @@ export default function Hero() {
   // ===========================
   // DATA SAFE EXTRACTION
   // ===========================
-  const image = featured?.photos?.[4]
-    ? getImageUrl(featured.photos[0])
+ const image =
+  featured?.photos?.length > 0
+    ? getImageUrl(
+        featured.photos[0]
+      )
     : bgImagetwo;
+
+    const heroBg =
+  featured?.photos?.length > 0
+    ? getImageUrl(
+        featured.photos[0]
+      )
+    : bgImage;
 
   const title = featured?.property?.title || "Luxury Villa";
   const beds = featured?.property?.bedrooms || 4;
@@ -159,6 +196,7 @@ export default function Hero() {
       <AboutSection listingId="69f0c3cd2203c21d5f9f323f" />
       {/* <FeesTable /> */}
       {/* <InfoSection /> */}
+  
       <Properties />
 
       <section className="py-16 px-6 md:px-16 bg-white">
