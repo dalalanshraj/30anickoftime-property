@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import api from "../api/axios.js";
-
 import { useModal } from "../context/ModalContext";
 
 import {
@@ -18,6 +16,10 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
+// =====================================
+// SORTABLE PHOTO
+// =====================================
+
 function SortablePhoto({
   photo,
   imageUrl,
@@ -30,7 +32,10 @@ function SortablePhoto({
     transform,
     transition,
   } = useSortable({
-    id: photo.url,
+    id:
+      typeof photo === "string"
+        ? photo
+        : photo.url,
   });
 
   const style = {
@@ -41,40 +46,50 @@ function SortablePhoto({
   };
 
   return (
-   <div
-  ref={setNodeRef}
-  style={style}
-  {...attributes}
-  className="relative border rounded overflow-hidden"
->
-     <div
-  {...listeners}
-  className="cursor-grab active:cursor-grabbing"
->
-  <img
-    src={
-      imageUrl ||
-      "/placeholder.png"
-    }
-    alt="listing"
-    className="w-full h-40 object-cover select-none"
-    draggable={false}
-  />
-</div>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      className="relative border rounded overflow-hidden bg-white"
+    >
+      {/* DRAG AREA */}
+      <div
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing"
+      >
+        <img
+          src={
+            imageUrl ||
+            "/placeholder.png"
+          }
+          alt="listing"
+          className="w-full h-40 object-cover select-none"
+          draggable={false}
+          onError={(e) => {
+            e.target.src =
+              "/placeholder.png";
+          }}
+        />
+      </div>
 
+      {/* DELETE BUTTON */}
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation();
           deletePhoto(photo);
         }}
-        className="absolute top-2 right-2 z-50 bg-red-600 text-white text-xs px-2 py-1 rounded"
+        className="absolute top-2 right-2 z-50 bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded"
       >
         ✕
       </button>
     </div>
   );
 }
+
+// =====================================
+// MAIN COMPONENT
+// =====================================
 
 export default function PhotosTab({
   listingId,
@@ -86,19 +101,48 @@ export default function PhotosTab({
 
   const { showModal } = useModal();
 
+  // =====================================
+  // SAFE IMAGE URL
+  // =====================================
+
   const getImageUrl = (photo) => {
     const base =
       import.meta.env.VITE_API_URL || "";
 
+    // NEW OBJECT FORMAT
     if (photo?.url) {
-      return `${base}/${photo.url.replace(
-        /^\//,
-        ""
-      )}`;
+      if (
+        photo.url.startsWith("http")
+      ) {
+        return photo.url;
+      }
+
+      return (
+        base.replace(/\/$/, "") +
+        "/" +
+        photo.url.replace(/^\//, "")
+      );
+    }
+
+    // OLD STRING FORMAT
+    if (typeof photo === "string") {
+      if (photo.startsWith("http")) {
+        return photo;
+      }
+
+      return (
+        base.replace(/\/$/, "") +
+        "/" +
+        photo.replace(/^\//, "")
+      );
     }
 
     return "/placeholder.png";
   };
+
+  // =====================================
+  // FETCH PHOTOS
+  // =====================================
 
   useEffect(() => {
     if (!listingId) return;
@@ -117,6 +161,10 @@ export default function PhotosTab({
       console.log(err);
     }
   };
+
+  // =====================================
+  // UPLOAD
+  // =====================================
 
   const uploadPhotos = async (files) => {
     if (!listingId) {
@@ -146,6 +194,10 @@ export default function PhotosTab({
       );
 
       setPhotos(res.data.photos || []);
+
+      showModal(
+        "Photos uploaded successfully"
+      );
     } catch (err) {
       console.log(err);
 
@@ -155,31 +207,68 @@ export default function PhotosTab({
     }
   };
 
+  // =====================================
+  // DELETE
+  // =====================================
+
   const deletePhoto = async (photo) => {
-  try {
-    console.log("DELETE PHOTO:", photo);
+    try {
+      console.log(
+        "DELETE PHOTO:",
+        photo
+      );
 
-    const filename =
-      photo.url.split("/").pop();
+      let imagePath = "";
 
-    console.log("FILENAME:", filename);
+      // OBJECT FORMAT
+      if (photo?.url) {
+        imagePath = photo.url;
+      }
 
-    const res = await api.delete(
-      `/listings/${listingId}/photos/${filename}`
-    );
+      // STRING FORMAT
+      else if (
+        typeof photo === "string"
+      ) {
+        imagePath = photo;
+      }
 
-    console.log("DELETE RES:", res.data);
+      else {
+        console.log(
+          "INVALID PHOTO"
+        );
+        return;
+      }
 
-    setPhotos(res.data.photos || []);
-  } catch (err) {
-    console.log(
-      "DELETE ERROR:",
-      err.response?.data || err
-    );
+      const filename =
+        imagePath.split("/").pop();
 
-    showModal("Delete failed");
-  }
-};
+      console.log(
+        "FILENAME:",
+        filename
+      );
+
+      const res = await api.delete(
+        `/listings/${listingId}/photos/${filename}`
+      );
+
+      setPhotos(res.data.photos || []);
+
+      showModal(
+        "Photo deleted successfully"
+      );
+    } catch (err) {
+      console.log(
+        "DELETE ERROR:",
+        err.response?.data || err
+      );
+
+      showModal("Delete failed");
+    }
+  };
+
+  // =====================================
+  // DRAG END
+  // =====================================
 
   const handleDragEnd = async (
     event
@@ -189,24 +278,37 @@ export default function PhotosTab({
     if (!over) return;
 
     if (active.id !== over.id) {
-      const oldIndex = photos.findIndex(
-        (p) => p.url === active.id
-      );
+      const oldIndex =
+        photos.findIndex(
+          (p) =>
+            (typeof p === "string"
+              ? p
+              : p.url) === active.id
+        );
 
-      const newIndex = photos.findIndex(
-        (p) => p.url === over.id
-      );
+      const newIndex =
+        photos.findIndex(
+          (p) =>
+            (typeof p === "string"
+              ? p
+              : p.url) === over.id
+        );
 
-      const updatedPhotos = arrayMove(
-        photos,
-        oldIndex,
-        newIndex
-      );
+      const updatedPhotos =
+        arrayMove(
+          photos,
+          oldIndex,
+          newIndex
+        );
 
       const reordered =
         updatedPhotos.map(
           (photo, index) => ({
-            ...photo,
+            url:
+              typeof photo ===
+              "string"
+                ? photo
+                : photo.url,
             order: index,
           })
         );
@@ -220,29 +322,49 @@ export default function PhotosTab({
             photos: reordered,
           }
         );
+
+        showModal(
+          "Photos reordered"
+        );
       } catch (err) {
         console.log(err);
+
+        showModal(
+          "Reorder failed"
+        );
       }
     }
   };
 
+  // =====================================
+  // UI
+  // =====================================
+
   return (
     <div className="space-y-6">
+      {/* FILE INPUT */}
+
       <input
         type="file"
         multiple
         accept="image/*"
         onChange={(e) =>
-          uploadPhotos(e.target.files)
+          uploadPhotos(
+            e.target.files
+          )
         }
-        className="border p-2 w-full"
+        className="border p-3 w-full rounded"
       />
+
+      {/* LOADING */}
 
       {uploading && (
         <p className="text-blue-600 font-semibold">
           Uploading...
         </p>
       )}
+
+      {/* PHOTOS */}
 
       <DndContext
         collisionDetection={
@@ -251,8 +373,10 @@ export default function PhotosTab({
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={photos.map(
-            (p) => p.url
+          items={photos.map((p) =>
+            typeof p === "string"
+              ? p
+              : p.url
           )}
           strategy={
             rectSortingStrategy
@@ -263,7 +387,11 @@ export default function PhotosTab({
               (photo, index) => (
                 <SortablePhoto
                   key={
-                    photo.url || index
+                    typeof photo ===
+                    "string"
+                      ? photo
+                      : photo.url ||
+                        index
                   }
                   photo={photo}
                   imageUrl={getImageUrl(
@@ -279,10 +407,12 @@ export default function PhotosTab({
         </SortableContext>
       </DndContext>
 
+      {/* NEXT BUTTON */}
+
       <div className="pt-6">
         <button
           onClick={goNextTab}
-          className="bg-blue-600 text-white px-6 py-2 rounded cursor-pointer"
+          className="bg-blue-600 text-white px-6 py-2 rounded cursor-pointer hover:bg-blue-700"
         >
           Next →
         </button>
