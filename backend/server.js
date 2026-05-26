@@ -74,8 +74,8 @@ app.use("/api/deals" , dealRoutes);
 app.use("/api/inquiries" , inquiryRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use(
-  "/gallery-uploads",
-  express.static("gallery-uploads")
+  "/uploads",
+  express.static("uploads")
 );
 
 app.use("/api", icalcalendarRoutes);
