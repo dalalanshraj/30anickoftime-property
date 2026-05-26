@@ -1,5 +1,5 @@
 import Gallery from "../models/Gallery.js";
-import sharp from "sharp";
+// import sharp from "sharp";
 import fs from "fs";
 import path from "path";
 
@@ -27,13 +27,18 @@ export const uploadImage = async (
         filename
       );
 
-      await sharp(file.buffer)
-        .resize({
-          width: 1600,
-          withoutEnlargement: true,
-        })
-        .webp({ quality: 75 })
-        .toFile(outputPath);
+    await sharp(file.path)
+  .resize({
+    width: 1600,
+    withoutEnlargement: true,
+  })
+  .webp({
+    quality: 75,
+  })
+  .toFile(outputPath);
+
+// ✅ delete temp file
+fs.unlinkSync(file.path);
 
       const created =
         await Gallery.create({
