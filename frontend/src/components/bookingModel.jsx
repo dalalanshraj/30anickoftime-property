@@ -5,7 +5,6 @@ import api from "../api/axios";
 import emailjs from "@emailjs/browser";
 import modelImg from "../assets/img3.jpg";
 
-
 export default function BookingModalContact({ listingId, onClose }) {
   const [calendarDates, setCalendarDates] = useState([]);
   const [error, setError] = useState("");
@@ -50,225 +49,211 @@ export default function BookingModalContact({ listingId, onClose }) {
   // DATE FORMAT
   // =====================================
 
-  
-
   // =====================================
   // MAP
   // =====================================
 
-const formatLocalDate = (date) => {
-
-  return new Intl.DateTimeFormat(
-    "en-CA",
-    {
+  const formatLocalDate = (date) => {
+    return new Intl.DateTimeFormat("en-CA", {
       timeZone: "America/Chicago",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-    }
-  ).format(new Date(date));
+    }).format(new Date(date));
+  };
 
-};
+  // =====================================
+  // BLOCKED MAP
+  // =====================================
 
-// =====================================
-// BLOCKED MAP
-// =====================================
+  const blockedMap = useMemo(() => {
+    const map = {};
 
-const blockedMap = useMemo(() => {
-
-  const map = {};
-
-  calendarDates.forEach((item) => {
-
-    const itemDate = new Date(
-      new Date(item.date).toLocaleString(
-        "en-US",
-        {
+    calendarDates.forEach((item) => {
+      const itemDate = new Date(
+        new Date(item.date).toLocaleString("en-US", {
           timeZone: "America/Chicago",
-        }
-      )
-    );
+        }),
+      );
 
-    const key =
-      formatLocalDate(itemDate);
+      const key = formatLocalDate(itemDate);
 
-    if (!map[key]) {
-      map[key] = [];
-    }
+      if (!map[key]) {
+        map[key] = [];
+      }
 
-    map[key].push(item.status);
+      map[key].push(item.status);
+    });
 
-  });
-
-  return map;
-
-}, [calendarDates]);
-
-// =====================================
-// DATE TYPE
-// =====================================
-
-const getDateType = useCallback((date) => {
-
-  const today = new Date();
-
-  today.setHours(0, 0, 0, 0);
-
-  const currentDate = new Date(date);
-
-  currentDate.setHours(0, 0, 0, 0);
-
-  // PAST
-  if (currentDate < today) {
-    return "past-day";
-  }
-
-  // CURRENT KEY
-  const currentKey =
-    formatLocalDate(currentDate);
-
-  const statuses =
-    blockedMap[currentKey] || [];
-
-  const hasCIN =
-    statuses.includes("CIN");
-
-  const hasCOUT =
-    statuses.includes("COUT");
-
-  const hasR =
-    statuses.includes("R");
-
-  const hasH =
-    statuses.includes("H");
+    return map;
+  }, [calendarDates]);
 
   // =====================================
-  // PREVIOUS DAY
+  // DATE TYPE
   // =====================================
 
-  const prevDay = new Date(currentDate);
+  const getDateType = useCallback(
+    (date) => {
+      const today = new Date();
 
-  prevDay.setDate(
-    prevDay.getDate() - 1
+      today.setHours(0, 0, 0, 0);
+
+      const currentDate = new Date(date);
+
+      currentDate.setHours(0, 0, 0, 0);
+
+      // PAST
+      if (currentDate < today) {
+        return "past-day";
+      }
+
+      // CURRENT KEY
+      const currentKey = formatLocalDate(currentDate);
+
+      const statuses = blockedMap[currentKey] || [];
+
+      const hasCIN = statuses.includes("CIN");
+
+      const hasCOUT = statuses.includes("COUT");
+
+      const hasR = statuses.includes("R");
+
+      const hasH = statuses.includes("H");
+
+      // =====================================
+      // PREVIOUS DAY
+      // =====================================
+
+      const prevDay = new Date(currentDate);
+
+      prevDay.setDate(prevDay.getDate() - 1);
+
+      const prevKey = formatLocalDate(prevDay);
+
+      const prevStatuses = blockedMap[prevKey] || [];
+
+      const prevHasBooking =
+        prevStatuses.includes("R") || prevStatuses.includes("COUT");
+
+      // =====================================
+      // TURNOVER
+      // =====================================
+
+      // SAME DAY
+      if (hasCIN && hasCOUT) {
+        return "turnover-day";
+      }
+
+      // PREVIOUS DAY BOOKED
+      // + CURRENT CHECKIN
+      if (hasCIN && prevHasBooking) {
+        return "turnover-day";
+      }
+
+      // CHECK-IN
+      if (hasCIN) {
+        return "checkin-day";
+      }
+
+      // CHECK-OUT
+      if (hasCOUT) {
+        return "checkout-day";
+      }
+
+      // BOOKED
+      if (hasR) {
+        return "blocked-day";
+      }
+
+      // HOLD
+      if (hasH) {
+        return "hold-day";
+      }
+
+      return "available-day";
+    },
+    [blockedMap],
   );
 
-  const prevKey =
-    formatLocalDate(prevDay);
+  const isDateSelectable = (date) => {
+    const type = getDateType(date);
 
-  const prevStatuses =
-    blockedMap[prevKey] || [];
+    // ❌ BLOCK THESE
+    if (type === "blocked-day" || type === "hold-day" || type === "past-day") {
+      return false;
+    }
 
-  const prevHasBooking =
-    prevStatuses.includes("R") ||
-    prevStatuses.includes("COUT");
+    return true;
+  };
 
-  // =====================================
-  // TURNOVER
-  // =====================================
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // SAME DAY
-  if (hasCIN && hasCOUT) {
-    return "turnover-day";
-  }
+    const propertyId = listingId || id;
 
-  // PREVIOUS DAY BOOKED
-  // + CURRENT CHECKIN
-  if (hasCIN && prevHasBooking) {
-    return "turnover-day";
-  }
+    if (!propertyId) {
+      aa;
+      alert("Property not found ❌");
+      return;
+    }
 
-  // CHECK-IN
-  if (hasCIN) {
-    return "checkin-day";
-  }
+    if (!form.name || !form.email || !form.phone) {
+      alert("Please fill all details ⚠️");
+      return;
+    }
 
-  // CHECK-OUT
-  if (hasCOUT) {
-    return "checkout-day";
-  }
+    if (!form.checkIn || !form.checkOut) {
+      alert("Please select dates 📅");
+      return;
+    }
 
-  // BOOKED
-  if (hasR) {
-    return "blocked-day";
-  }
+    try {
+      setLoading(true);
 
-  // HOLD
-  if (hasH) {
-    return "hold-day";
-  }
+      const dbPayload = {
+        property: propertyId, // ✅ FIXED
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        message: form.message || "",
 
-  return "available-day";
+        Arrival: form.checkIn,
+        Departure: form.checkOut,
 
-}, [blockedMap]);
+        Adults: form.adults,
+        Kids: form.kids,
+      };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+      console.log("SENDING:", dbPayload);
 
-  const propertyId = listingId || id;
+      await api.post("/inquiries", dbPayload);
 
-  if (!propertyId) {aa
-    alert("Property not found ❌");
-    return;
-  }
+      const emailPayload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        checkIn: form.checkIn.toDateString(),
+        checkOut: form.checkOut.toDateString(),
+        adults: form.adults,
+        kids: form.kids,
+        message: form.message,
+      };
 
-  if (!form.name || !form.email || !form.phone) {
-    alert("Please fill all details ⚠️");
-    return;
-  }
+      await emailjs.send(
+        "service_x4xnlqz",
+        "template_oeep0hc",
+        emailPayload,
+        "CRTc5BG_9M1t3EjYj",
+      );
 
-  if (!form.checkIn || !form.checkOut) {
-    alert("Please select dates 📅");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const dbPayload = {
-      property: propertyId, // ✅ FIXED
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      message: form.message || "",
-
-      Arrival: form.checkIn,
-      Departure: form.checkOut,
-
-      Adults: form.adults,
-      Kids: form.kids,
-    };
-
-    console.log("SENDING:", dbPayload);
-
-    await api.post("/inquiries", dbPayload);
-
-    const emailPayload = {
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      checkIn: form.checkIn.toDateString(),
-      checkOut: form.checkOut.toDateString(),
-      adults: form.adults,
-      kids: form.kids,
-      message: form.message,
-    };
-
-    await emailjs.send(
-      "service_x4xnlqz",
-      "template_oeep0hc",
-      emailPayload,
-      "CRTc5BG_9M1t3EjYj"
-    );
-
-    alert("Booking request sent ✅");
-
-  } catch (err) {
-    console.log("ERROR:", err.response?.data || err);
-    alert(err.response?.data?.error || "Something went wrong ❌");
-  } finally {
-    setLoading(false);
-  }
-};
+      alert("Booking request sent ✅");
+    } catch (err) {
+      console.log("ERROR:", err.response?.data || err);
+      alert(err.response?.data?.error || "Something went wrong ❌");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const nights =
     form.checkIn && form.checkOut
@@ -336,34 +321,34 @@ const getDateType = useCallback((date) => {
                 />
                 {/* Guests */}
                 <div className="flex gap-3">
-              {/* Adults */}
-              <div className="w-full">
-                <label className="text-sm text-gray-500">Adults</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={form.adults}
-                  className="w-full border p-3 rounded-lg"
-                  onChange={(e) =>
-                    setForm({ ...form, adults: Number(e.target.value) })
-                  }
-                />
-              </div>
+                  {/* Adults */}
+                  <div className="w-full">
+                    <label className="text-sm text-gray-500">Adults</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={form.adults}
+                      className="w-full border p-3 rounded-lg"
+                      onChange={(e) =>
+                        setForm({ ...form, adults: Number(e.target.value) })
+                      }
+                    />
+                  </div>
 
-              {/* Kids */}
-              <div className="w-full">
-                <label className="text-sm text-gray-500">Kids</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={form.kids}
-                  className="w-full border p-3 rounded-lg"
-                  onChange={(e) =>
-                    setForm({ ...form, kids: Number(e.target.value) })
-                  }
-                />
-              </div>
-            </div>
+                  {/* Kids */}
+                  <div className="w-full">
+                    <label className="text-sm text-gray-500">Kids</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={form.kids}
+                      className="w-full border p-3 rounded-lg"
+                      onChange={(e) =>
+                        setForm({ ...form, kids: Number(e.target.value) })
+                      }
+                    />
+                  </div>
+                </div>
                 {/* DATE */}
                 <div className="flex gap-3">
                   <div
@@ -397,6 +382,7 @@ const getDateType = useCallback((date) => {
                           checkIn: start,
                           checkOut: null,
                         });
+
                         setSelecting("checkOut");
                       } else {
                         setForm({
@@ -408,6 +394,8 @@ const getDateType = useCallback((date) => {
                     }}
                     minDate={new Date()}
                     dayClassName={getDateType}
+                    // ✅ IMPORTANT
+                    filterDate={isDateSelectable}
                   />
                 </div>
                 <textarea
@@ -423,7 +411,9 @@ const getDateType = useCallback((date) => {
                     {nights} nights selected
                   </p>
                 )}
- <p className=" text-sm mt-2 text-black">Cleaning Fee - 850 - Mandatory</p>
+                <p className=" text-sm mt-2 text-black">
+                  Cleaning Fee - 850 - Mandatory
+                </p>
                 <button className="w-full bg-[#FFE8BE] py-3 rounded-lg">
                   Send Booking
                 </button>
