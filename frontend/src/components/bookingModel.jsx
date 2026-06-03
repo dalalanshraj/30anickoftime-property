@@ -229,6 +229,8 @@ export default function BookingModalContact({ listingId, onClose }) {
       await api.post("/inquiries", dbPayload);
 
       const emailPayload = {
+          to_email:
+    "pattisnuccio@gmail.com",
         name: form.name,
         email: form.email,
         phone: form.phone,
