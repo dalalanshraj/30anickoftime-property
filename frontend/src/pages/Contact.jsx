@@ -53,6 +53,7 @@ const locationName =
   "Location not available";
 
 const email =
+  listing?.property?.email ||
   listing?.property?.altEmail ||
   "Email not available";
 
@@ -222,18 +223,27 @@ useEffect(() => {
       await api.post("/inquiries", dbPayload);
 
       // ✅ EMAIL PAYLOAD
-      const emailPayload = {
-        to_email:
-    "pattisnuccio@gmail.com",
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        checkIn: form.checkIn.toDateString(),
-        checkOut: form.checkOut.toDateString(),
-        adults: form.adults,
-        kids: form.kids,
-        message: form.message,
-      };
+    const emails = [
+  listing?.property?.email,
+  listing?.property?.altEmail,
+]
+  .filter(Boolean)
+  .join(",");
+
+console.log("EMAILS:", emails);
+
+const emailPayload = {
+  to_email: emails,
+
+  name: form.name,
+  email: form.email,
+  phone: form.phone,
+  checkIn: form.checkIn.toDateString(),
+  checkOut: form.checkOut.toDateString(),
+  adults: form.adults,
+  kids: form.kids,
+  message: form.message,
+};
 
       // ✅ SEND EMAIL
       await emailjs.send(
@@ -343,6 +353,7 @@ useEffect(() => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               placeholder="Name"
+              value={form.name}
               className="w-full border p-3 rounded-lg"
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
@@ -350,11 +361,13 @@ useEffect(() => {
             <input
               placeholder="Email"
               className="w-full border p-3 rounded-lg"
+              value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
 
             <input
               placeholder="Phone"
+              value={form.phone}
               className="w-full border p-3 rounded-lg"
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
             />
@@ -437,6 +450,7 @@ useEffect(() => {
             </div>
             <textarea
               placeholder="Your Message"
+               value={form.message}
               className="w-full border p-3 rounded-lg"
               onChange={(e) => setForm({ ...form, message: e.target.value })}
             />
@@ -447,9 +461,23 @@ useEffect(() => {
             <p className=" text-sm mt-2 text-black">
               Cleaning Fee - 850 - Mandatory
             </p>
-            <button className="w-full bg-[#FFE8BE] py-3 rounded-lg">
-              Send Booking
-            </button>
+            {status.message && (
+  <div
+    className={`p-3 rounded-lg text-sm font-medium ${
+      status.type === "success"
+        ? "bg-green-100 text-green-700"
+        : "bg-red-100 text-red-700"
+    }`}
+  >
+    {status.message}
+  </div>
+)}
+           <button
+  disabled={loading}
+  className="w-full bg-[#FFE8BE] py-3 rounded-lg disabled:opacity-50"
+>
+  {loading ? "Sending..." : "Send Booking"}
+</button>
           </form>
         </div>
       </section>
