@@ -30,12 +30,12 @@ export default function Footer({listingId}) {
 }, [listingId]);
 
 const phone =
-  listing?.property?.altPhone ||
+  listing?.property?.phone ||
   listing?.altPhone ||
   "Phone not available";
 
 const email =
-  listing?.property?.altEmail ||
+  listing?.property?.email ||
   listing?.altEmail ||
   "Email not available";
 

@@ -53,12 +53,13 @@ const locationName =
   "Location not available";
 
 const email =
-  listing?.property?.email ||
-  listing?.property?.altEmail ||
+ 
+
+   listing?.property?.email ||
   "Email not available";
 
 const phone =
-  listing?.property?.altPhone ||
+  listing?.property?.phone ||
   "Phone not available";
 
   // 🔥 FETCH BLOCKED DATES (ICAL API)
