@@ -161,6 +161,16 @@ useEffect(() => {
   return "available-day";
 
 };
+ const isDateSelectable = (date) => {
+    const type = getDateType(date);
+
+    // ❌ BLOCK THESE
+    if (type === "blocked-day" || type === "hold-day" || type === "past-day") {
+      return false;
+    }
+
+    return true;
+  };
 
   useEffect(() => {
     if (!status.message) return;
@@ -213,6 +223,8 @@ useEffect(() => {
 
       // ✅ EMAIL PAYLOAD
       const emailPayload = {
+        to_email:
+    "pattisnuccio@gmail.com",
         name: form.name,
         email: form.email,
         phone: form.phone,
@@ -420,6 +432,7 @@ useEffect(() => {
                 }}
                 minDate={new Date()}
                 dayClassName={getDateType}
+                 filterDate={isDateSelectable}
               />
             </div>
             <textarea
