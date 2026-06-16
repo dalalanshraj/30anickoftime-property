@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+ import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   MdDashboard,
@@ -33,15 +33,11 @@ const Sidebar = () => {
 
   return (
     <div className="fixed top-0 left-0 w-64 h-screen bg-gray-900 text-white p-4 flex flex-col">
-
       {/* TITLE */}
-      <h2 className="text-2xl font-bold mb-6">
-        Admin Panel
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
 
       {/* 🔥 ADMIN INFO (UPGRADED UI) */}
       <div className="mb-6 border-b border-gray-700 pb-4 flex items-center gap-3">
-        
         {/* Avatar */}
         <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold">
           {user?.name?.charAt(0)?.toUpperCase() || "A"}
@@ -50,22 +46,18 @@ const Sidebar = () => {
         {/* Info */}
         <div>
           <p className="text-xs text-gray-400">Logged in as</p>
-          <h3 className="font-semibold text-sm">
-            {user?.name || "Admin"}
-          </h3>
+          <h3 className="font-semibold text-sm">{user?.name || "Admin"}</h3>
         </div>
-
       </div>
 
       {/* NAV */}
       <nav className="space-y-2 flex flex-col flex-grow">
-
         <NavLink to="/admin/dashboard" className={linkClass}>
           <MdDashboard size={20} />
           Dashboard
         </NavLink>
 
-        <NavLink to="/admin/listings" className={linkClass}>
+        <NavLink to="/admin/listings" end className={linkClass}>
           <MdListAlt size={20} />
           Listings
         </NavLink>
@@ -75,10 +67,12 @@ const Sidebar = () => {
           Users
         </NavLink>
 
-         <NavLink to="/admin/listings/property_add" className={linkClass}>
-          <MdAddBox size={20} />
-          Add Listing
-        </NavLink>
+        {user?.role === "superadmin" && (
+          <NavLink to="/admin/listings/property_add" className={linkClass}>
+            <MdAddBox size={20} />
+            Add Listing
+          </NavLink>
+        )}
 
         <NavLink to="/admin/gallery" className={linkClass}>
           <MdAddBox size={20} />
@@ -94,7 +88,6 @@ const Sidebar = () => {
         <MdLogout size={20} />
         Logout
       </button>
-
     </div>
   );
 };
