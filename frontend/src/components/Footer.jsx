@@ -147,7 +147,7 @@ const locationName =
                 transition 
                 duration-300">
                 <MdEmail className="mt-1" />
-                Admin Login
+                Owner Login
               </button>
             </Link>
         </div>
