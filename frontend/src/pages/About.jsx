@@ -53,22 +53,21 @@ export default function About({ listingId }) {
       .catch(console.log);
   }, []);
 
-  const image =
-    listing?.photos?.length > 0
-      ? getImageUrl(listing.photos[0])
-      : "https://via.placeholder.com/600x400";
-
-  // 👉 fallback images (important)
-  const image1 =
-    images[0] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
-
-  const image2 =
-    images[1] || "https://images.unsplash.com/photo-1560185007-cde436f6a4d0";
-
-  const image3 = images[4];
-
-  const heroImage = images[2] || image1;
-
+ const image =
+      listing?.photos?.length > 0
+        ? getImageUrl(listing.photos[0])
+        : "https://via.placeholder.com/600x400";
+  
+    // 👉 fallback images (important)
+    const image1 =
+      images[0] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
+  
+    const image2 =
+      images[1] || "https://images.unsplash.com/photo-1560185007-cde436f6a4d0";
+  
+    const image3 = images[4];
+  
+    const heroImage = images[2] || image1;
 
   return (
     <>
