@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 4001;
 const allowedOrigins = [
  "https://30anickoftime.com",   // ✅ ADD THIS
   "https://www.30anickoftime.com", // optional
-  "http://localhost:5173"
+  "http://localhost:5174"
 ];
 
 app.use(

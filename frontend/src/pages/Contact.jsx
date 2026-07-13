@@ -12,6 +12,7 @@ export default function Contact({listingId}) {
  const [calendarDates, setCalendarDates] = useState([]);
  const [listing, setListing] = useState(null);
   const [selecting, setSelecting] = useState("checkIn");
+      const [images, setImages] = useState([]);
   const [status, setStatus] = useState({
     type: "", // success | error
     message: "",
@@ -284,8 +285,67 @@ const emailPayload = {
       ? Math.ceil((form.checkOut - form.checkIn) / (1000 * 60 * 60 * 24))
       : 0;
 
-      const image1 = imgthree;
-
+      const getImageUrl = (photo) => {
+    const base =
+      import.meta.env.VITE_API_URL || "";
+  
+    // new object format
+    if (photo?.url) {
+      if (photo.url.startsWith("http")) {
+        return photo.url;
+      }
+  
+      return (
+        base.replace(/\/$/, "") +
+        "/" +
+        photo.url.replace(/^\//, "")
+      );
+    }
+  
+    // old string fallback
+    if (typeof photo === "string") {
+      if (photo.startsWith("http")) {
+        return photo;
+      }
+  
+      return (
+        base.replace(/\/$/, "") +
+        "/" +
+        photo.replace(/^\//, "")
+      );
+    }
+  
+    return "https://via.placeholder.com/600x400";
+  };
+  
+    useEffect(() => {
+      api
+        .get("/gallery/published")
+        .then((res) => {
+          const data = res.data || [];
+  
+          const formatted = data.map((img) => getImageUrl(img.image));
+  
+          setImages(formatted);
+        })
+        .catch(console.log);
+    }, []);
+  
+    const image =
+      listing?.photos?.length > 0
+        ? getImageUrl(listing.photos[0])
+        : "https://via.placeholder.com/600x400";
+  
+    // 👉 fallback images (important)
+    const image1 =
+      images[0] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
+  
+    const image2 =
+      images[1] || "https://images.unsplash.com/photo-1560185007-cde436f6a4d0";
+  
+    const image3 = images[4];
+  
+    const heroImage = images[2] || image1;
   return (
     <>
       {/* 🔥 HERO */}
@@ -293,7 +353,7 @@ const emailPayload = {
         <div
           className="absolute inset-0 bg-cover bg-center"
            style={{
-            backgroundImage: `url(${image1})`,
+            backgroundImage: `url(${heroImage})`,
           }}
         />
         <div className="absolute inset-0 bg-black/60" />
