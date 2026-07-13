@@ -76,7 +76,7 @@ export default function About({ listingId }) {
         <div
           className="absolute inset-0 bg-fixed bg-cover bg-center"
           style={{
-            backgroundImage: `url(${image1})`,
+            backgroundImage: `url(${heroImage})`,
           }}
         />
 
