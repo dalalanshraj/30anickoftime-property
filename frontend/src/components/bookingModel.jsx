@@ -397,7 +397,7 @@ export default function BookingModalContact({ listingId, onClose }) {
                     minDate={new Date()}
                     dayClassName={getDateType}
                     // ✅ IMPORTANT
-                    filterDate={f}
+                   filterDate={isDateSelectable}
                   />
                 </div>
                 <textarea
