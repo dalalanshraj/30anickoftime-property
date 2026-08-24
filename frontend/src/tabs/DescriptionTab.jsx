@@ -59,33 +59,38 @@ export default function DescriptionTab({
   return (
    <div className="space-y-5">
 
-      <Editor
-        apiKey="2r6x758dp6es0ii45zfw9xu5fy23suwa6g8qxoakazk9tywz"
-        onInit={(evt, editor) => {
-          editorRef.current = editor;
-          setEditorReady(true); //  very important
-        }}
-        initialValue=""
-        init={{
-          height: 350,
-          menubar: false,
-          plugins: [
-            "advlist",
-            "autolink",
-            "lists",
-            "link",
-            "charmap",
-            "preview",
-            "searchreplace",
-            "code",
-            "fullscreen",
-            "table",
-            "wordcount",
-          ],
-          toolbar:
-            "undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link | code",
-        }}
-      />
+     <Editor
+  tinymceScriptSrc="/tinymce/tinymce.min.js"
+  licenseKey="gpl"
+  onInit={(evt, editor) => {
+    editorRef.current = editor;
+  }}
+  init={{
+    height: 350,
+    menubar: false,
+    branding: false,
+    promotion: false,
+
+    plugins: [
+      "advlist",
+      "autolink",
+      "lists",
+      "link",
+      "charmap",
+      "preview",
+      "searchreplace",
+      "code",
+      "fullscreen",
+      "table",
+      "wordcount",
+    ],
+
+    toolbar:
+      "undo redo | bold italic underline | " +
+      "alignleft aligncenter alignright | " +
+      "bullist numlist | link | code",
+  }}
+/>
 
       <button
         onClick={saveDescription}
