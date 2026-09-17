@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import startCalendarCron from "./cron/calendarCron.js";
 
 // import axios from "axios";
 // import Property from "./models/Property.js";
@@ -27,14 +28,16 @@ import inquiryRoutes from "./routes/inquiryRoutes.js";
 import calendarRoutes from "./routes/listingCalendarRoutes.js";
 import dealRoutes from    "./routes/dealRoutes.js"
 import galleryRoutes from "./routes/galleryRoutes.js";
-import icalcalendarRoutes from "./routes/icalRoutes.js";
+// import icalcalendarRoutes from "./routes/icalRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 4001;
 const allowedOrigins = [
  "https://30anickoftime.com",   // ✅ ADD THIS
   "https://www.30anickoftime.com", // optional
-  "http://localhost:5175"
+  "http://localhost:5174"
 ];
 
 app.use(
@@ -73,18 +76,11 @@ app.use("/api/listings", calendarRoutes);
 app.use("/api/deals" , dealRoutes);
 app.use("/api/inquiries" , inquiryRoutes);
 app.use("/api/gallery", galleryRoutes);
-app.use(
-  "/gallery-uploads",
-  express.static("gallery-uploads")
-);
-
-app.use(
-  "/uploads",
-  express.static("uploads")
-);
-
-app.use("/api", icalcalendarRoutes);
-
+app.use( "/gallery-uploads", express.static("gallery-uploads") );
+app.use("/api/contact", contactRoutes);
+app.use( "/uploads", express.static("uploads") );
+// app.use("/api", icalcalendarRoutes);
+app.use("/api/profile", profileRoutes);
 
 
 
